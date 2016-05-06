@@ -1,0 +1,18 @@
+{
+  "name": "scriptingtalen-puzzel",
+  "authors": [
+    "Pieter De Clercq <pieterdeclercq@outlook.com>"
+  ],
+  "description": "Scriptingtalen project - Schuifpuzzel",
+  "main": "",
+  "license": "MIT",
+  "homepage": "http://users.ugent.be/~piedcler/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

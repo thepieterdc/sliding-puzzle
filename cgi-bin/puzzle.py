@@ -26,7 +26,7 @@ def respond(success: bool, parameters):
 
 def respondOk(a: str, r: int, tS: int):
     respond(True,
-            {"directoryname": "images/{}/{}".format(a, str(r)), "extension": "png", "nrofpieces": r * r,
+            {"directoryname": "assets/images/{}/{}".format(a, str(r)), "extension": "png", "nrofpieces": r * r,
              "size": {"width": tS, "height": tS}})
 
 print("Access-Control-Allow-Origin: *")
@@ -36,8 +36,8 @@ artist = str(cgi.FieldStorage().getvalue("artiest")).lower()
 rows = int(cgi.FieldStorage().getvalue("rijen"))
 cols = int(cgi.FieldStorage().getvalue("kolommen"))
 
-if os.path.exists("images/{}/{}".format(artist, str(rows))):
-    respondOk(artist, rows, Image.open("images/{}/{}/0-0.png".format(artist, rows)).size[0])
+if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
+    respondOk(artist, rows, Image.open("assets/images/{}/{}/0-0.png".format(artist, rows)).size[0])
 
 os.makedirs("images/{}/{}".format(artist, str(rows)))
 
@@ -58,11 +58,11 @@ img = Image.open(download(results[max(results)])[0])
 borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
 tileSize = borderedImg.size[0] // cols, borderedImg.size[1] // rows
 
-if not os.path.exists("images/{}/{}".format(artist, str(rows))):
-    os.makedirs("images/{}/{}".format(artist, str(rows)))
+if not os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
+    os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
 
 [borderedImg.copy().crop((c * tileSize[0], r * tileSize[1], (c + 1) * tileSize[0], (r + 1) * tileSize
-[1])).save("images/{}/{}/{}-{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
+[1])).save("assets/images/{}/{}/{}-{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
  for r in range(0, rows)]
 
 respondOk(artist, rows, tileSize[0])
