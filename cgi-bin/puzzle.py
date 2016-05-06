@@ -46,6 +46,9 @@ if "correction" not in correctedArtist:
     respond(False, "Artist not found.")
 artist = str(correctedArtist['correction']['artist']['name']).lower()
 
+if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
+    respondOk(artist, rows, Image.open("assets/images/{}/{}/0-0.png".format(artist, rows)).size[0])
+
 os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
 
 albums = getLastFM('artist.search', artist).get('results')
