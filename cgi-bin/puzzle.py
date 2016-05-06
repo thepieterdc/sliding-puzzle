@@ -24,14 +24,22 @@ def respond(success: bool, parameters):
     exit()
 
 
+def respondOk(a: str, r: int, tS: int):
+    respond(True,
+            {"directoryname": "images/{}/{}".format(a, str(r)), "extension": "png", "nrofpieces": r * r,
+             "size": {"width": tS, "height": tS}})
+
+
 print("Content-Type: application/json\n")
 
 artist = str(cgi.FieldStorage().getvalue("artiest")).lower()
 rows = int(cgi.FieldStorage().getvalue("rijen"))
 cols = int(cgi.FieldStorage().getvalue("kolommen"))
 
-if not os.path.exists("images/{}/{}".format(artist, str(rows))):
-    os.makedirs("images/{}/{}".format(artist, str(rows)))
+if os.path.exists("images/{}/{}".format(artist, str(rows))):
+    respondOk(artist, rows, Image.open("images/{}/{}/0-0.png".format(artist, rows)).size[0])
+
+os.makedirs("images/{}/{}".format(artist, str(rows)))
 
 sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
 
@@ -43,7 +51,7 @@ artist = str(correctedArtist['correction']['artist']['name']).lower()
 albums = getLastFM('artist.search', artist).get('results')
 if not int(albums['opensearch:totalResults']):
     respond(False, "No albums found.")
-albums = [album for album in albums.get('artistmatches').get('artist') if album['name'] == artist]
+albums = [album for album in albums.get('artistmatches').get('artist') if str(album['name']).lower() == artist]
 results = {sizes.index(album['size']): album['#text'] for album in albums[0].get('image')}
 
 img = Image.open(download(results[max(results)])[0])
@@ -57,5 +65,4 @@ if not os.path.exists("images/{}/{}".format(artist, str(rows))):
 [1])).save("images/{}/{}/{}-{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
  for r in range(0, rows)]
 
-respond(True, {"directoryname": "images/{}/{}".format(artist, str(rows)), "extension": "png", "nrofpieces": rows * cols,
-               "size": {"width": tileSize[0], "height": tileSize[1]}})
+respondOk(artist, rows, tileSize[0])
