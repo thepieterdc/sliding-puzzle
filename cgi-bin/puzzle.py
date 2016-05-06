@@ -29,7 +29,7 @@ def respondOk(a: str, r: int, tS: int):
             {"directoryname": "images/{}/{}".format(a, str(r)), "extension": "png", "nrofpieces": r * r,
              "size": {"width": tS, "height": tS}})
 
-
+print("Access-Control-Allow-Origin: *")
 print("Content-Type: application/json\n")
 
 artist = str(cgi.FieldStorage().getvalue("artiest")).lower()
