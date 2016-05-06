@@ -39,14 +39,14 @@ cols = int(cgi.FieldStorage().getvalue("kolommen"))
 if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
     respondOk(artist, rows, Image.open("assets/images/{}/{}/0-0.png".format(artist, rows)).size[0])
 
-os.makedirs("images/{}/{}".format(artist, str(rows)))
-
 sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
 
 correctedArtist = getLastFM('artist.getcorrection', artist).get('corrections')
 if "correction" not in correctedArtist:
     respond(False, "Artist not found.")
 artist = str(correctedArtist['correction']['artist']['name']).lower()
+
+os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
 
 albums = getLastFM('artist.search', artist).get('results')
 if not int(albums['opensearch:totalResults']):
@@ -56,10 +56,8 @@ results = {sizes.index(album['size']): album['#text'] for album in albums[0].get
 
 img = Image.open(download(results[max(results)])[0])
 borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
+borderedImg.save("assets/images/{}/original.png".format(artist))
 tileSize = borderedImg.size[0] // cols, borderedImg.size[1] // rows
-
-if not os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
-    os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
 
 [borderedImg.copy().crop((c * tileSize[0], r * tileSize[1], (c + 1) * tileSize[0], (r + 1) * tileSize
 [1])).save("assets/images/{}/{}/{}-{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
