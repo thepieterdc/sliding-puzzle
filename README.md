@@ -1,5 +1,5 @@
 # scriptingtalen-puzzel
 Scriptingtalen Project - Schuifpuzzel
 
-## Installation
+### Installation
 ``` bower install ```
