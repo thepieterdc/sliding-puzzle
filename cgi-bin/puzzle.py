@@ -20,7 +20,7 @@ def lastfm(method: str, a: str) -> dict:
 
 
 def parseartist(a: str) -> str:
-    return urllib.parse.quote(a.lower().replace(" ", "_"))
+    return urllib.parse.quote(a.lower().replace("%20"," ").replace(" ", "_"))
 
 
 def respond(success: bool, parameters):
@@ -40,11 +40,12 @@ print("Content-Type: application/json\n")
 
 sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
 
-artist = parseartist(cgi.FieldStorage().getvalue("artiest"))
+artist = cgi.FieldStorage().getvalue("artiest").lower()
+cleanArtist = parseartist(artist)
 rows = int(cgi.FieldStorage().getvalue("rijen"))
 cols = int(cgi.FieldStorage().getvalue("kolommen"))
 
-artistFolder = "assets/puzzles/{}".format(artist)
+artistFolder = "assets/puzzles/{}".format(cleanArtist)
 folder = "{}/{}x{}".format(artistFolder, str(cols), str(rows))
 
 if os.path.exists(folder):
@@ -72,4 +73,4 @@ os.makedirs(folder)
 [1])).save("{}/{}_{}.{}".format(folder, c, r, 'png')) for c in range(0, cols)
  for r in range(0, rows)]
 
-ok(artist, cols, rows, tileSize)
+ok(folder, cols, rows, tileSize)

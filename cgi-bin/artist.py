@@ -14,7 +14,7 @@ def lastfm(method: str, a: str) -> dict:
 
 
 def parseartist(a: str) -> str:
-    return urllib.parse.quote(a.lower().replace(" ", "_"))
+    return urllib.parse.quote(a.lower().replace("%20"," ").replace(" ", "_"))
 
 
 def respond(success: bool, parameters):
