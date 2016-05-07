@@ -42,21 +42,16 @@ if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
 
 sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
 
-correctedArtist = lastfm('artist.getcorrection', artist).get('corrections')
-if "correction" not in correctedArtist:
-    respond(False, "Artist not found.")
-artist = str(correctedArtist['correction']['artist']['name']).lower()
-
 if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
     ok(artist, rows, Image.open("assets/images/{}/{}/0-0.png".format(artist, rows)).size[0])
 
-os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
-
 albums = lastfm('artist.search', artist).get('results')
-if not int(albums['opensearch:totalResults']):
-    respond(False, "No albums found.")
 albums = [album for album in albums.get('artistmatches').get('artist') if str(album['name']).lower() == artist]
+if not len(albums):
+    respond(False, "No albums found.")
 results = {sizes.index(album['size']): album['#text'] for album in albums[0].get('image')}
+
+os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
 
 img = Image.open(download(results[max(results)])[0])
 borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
