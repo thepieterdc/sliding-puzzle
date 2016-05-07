@@ -6,18 +6,14 @@ import urllib.parse
 import urllib.request
 
 
-def find_nth(haystack, needle, n):
-    start = haystack.find(needle)
-    while start >= 0 and n > 1:
-        start = haystack.find(needle, start + len(needle))
-        n -= 1
-    return start
-
-
 def lastfm(method: str, a: str) -> dict:
     return json.loads(urllib.request.urlopen(urllib.request.Request(
         "http://ws.audioscrobbler.com/2.0/?method={}&artist={}&autocorrect=1&api_key=c94f6bae579e47179e8fbde12880a85c&format=json".format(
             method, urllib.parse.quote(a)))).read().decode("utf8"))
+
+
+def longest(a: str, b: str) -> str:
+    return a if len(a) > len(b) else b
 
 
 def respond(success: bool, parameters):
@@ -39,14 +35,16 @@ artist = str(cgi.FieldStorage().getvalue("artist")).lower()
 lastFmInfo = lastfm("artist.getinfo", artist)
 try:
     assert "error" not in lastFmInfo
-    wikipediaInfo = wikipedia(str(lastFmInfo.get("artist").get("name")))
-    lastFmBio = str(lastFmInfo.get("artist").get("bio").get("content"))
-    if lastFmBio.count("\n") > 4:
-        lastFmBio = lastFmBio[:find_nth(lastFmBio, "\n", 4)]
-    lastFmBio = lastFmBio.replace("\n", " ").replace("  ", " ").strip()
-    wikipediaBio = str(list(wikipediaInfo.get("query").get("pages").values())[0].get("extract"))
-    wikipediaBio = wikipediaBio.replace("\n", " ").replace("  ", " ").strip()
-    respond(True, {"biography": lastFmBio if len(lastFmBio) > len(wikipediaBio) else wikipediaBio,
-                   "name": lastFmInfo.get("artist").get("name")})
+    wikipediaInfo = wikipedia(str(lastFmInfo["artist"]["name"]))
+
+    lastFmBio = str(lastFmInfo["artist"]["bio"]["content"]).replace("\n", " ").replace("  ", " ").strip()
+    wikipediaBio = str(list(wikipediaInfo["query"]["pages"].values())[0]["extract"]).replace("\n", " ").replace("  ",
+                                                                                                                " ").strip()
+    bio = longest(lastFmBio, wikipediaBio)
+
+    try:
+        respond(True, {"biography": bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")], "name": lastFmInfo["artist"]["name"]})
+    except Exception:
+        respond(True, {"biography": bio, "name": lastFmInfo["artist"]["name"]})
 except Exception:
     respond(False, "No artist biography found.")
