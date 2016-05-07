@@ -14,7 +14,7 @@ def lastfm(method: str, a: str) -> dict:
 
 
 def parseArtist(a: str) -> str:
-    return urllib.parse.quote(a.lower()).replace(" ", "_")
+    return urllib.parse.quote(a.lower().replace(" ", "_"))
 
 
 def respond(success: bool, parameters):
@@ -37,11 +37,12 @@ saveFile = "assets/artists/{}.json".format(artist)
 
 if os.path.isfile(saveFile):
     respond(True, json.loads(open(saveFile).readlines()))
+saveFile = open(saveFile, "a+")
 
 lastFmInfo = lastfm("artist.getinfo", artist)
 try:
     assert "error" not in lastFmInfo
-    
+
     wikipediaInfo = wikipedia(str(lastFmInfo["artist"]["name"]))
 
     lastFmBio = str(lastFmInfo["artist"]["bio"]["content"]).replace("\n", " ").replace("  ", " ").strip()
@@ -49,10 +50,13 @@ try:
                                                                                                                 " ").strip()
     bio = lastFmBio if len(lastFmBio) > len(wikipediaBio) else wikipediaBio
 
+    response = {"name": parseArtist(lastFmInfo["artist"]["name"])}
     try:
-        respond(True, {"biography": bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")],
-                       "name": lastFmInfo["artist"]["name"]})
+        response["biography"] = bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")]
     except Exception:
-        respond(True, {"biography": bio, "name": lastFmInfo["artist"]["name"]})
+        response["biography"] = bio
+
+    saveFile.write(json.dumps(response))
+    respond(True, response)
 except Exception:
     respond(False, "No artist biography found.")
