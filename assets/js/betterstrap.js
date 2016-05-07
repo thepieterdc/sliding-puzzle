@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    $.fn.bsValidateClear = function() {
+    $.fn.bsValidateClear = function () {
         this.parent().removeClass("has-error").removeClass("has-success").removeClass("has-warning");
     };
 

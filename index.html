@@ -13,7 +13,7 @@
         var api = "http://localhost:8000/cgi-bin/";
     </script>
     <style type="text/css">
-        #fountainG {
+        .fountainGContainer {
             position: relative;
             width: 234px;
             height: 28px;
@@ -58,7 +58,7 @@
             -moz-border-radius: 19px;
         }
 
-        #fountainG_1 {
+        .fountainG_1 {
             left: 0;
             animation-delay: 0.366s;
             -o-animation-delay: 0.366s;
@@ -67,7 +67,7 @@
             -moz-animation-delay: 0.366s;
         }
 
-        #fountainG_2 {
+        .fountainG_2 {
             left: 29px;
             animation-delay: 0.4525s;
             -o-animation-delay: 0.4525s;
@@ -76,7 +76,7 @@
             -moz-animation-delay: 0.4525s;
         }
 
-        #fountainG_3 {
+        .fountainG_3 {
             left: 58px;
             animation-delay: 0.549s;
             -o-animation-delay: 0.549s;
@@ -85,7 +85,7 @@
             -moz-animation-delay: 0.549s;
         }
 
-        #fountainG_4 {
+        .fountainG_4 {
             left: 88px;
             animation-delay: 0.6355s;
             -o-animation-delay: 0.6355s;
@@ -94,7 +94,7 @@
             -moz-animation-delay: 0.6355s;
         }
 
-        #fountainG_5 {
+        .fountainG_5 {
             left: 117px;
             animation-delay: 0.732s;
             -o-animation-delay: 0.732s;
@@ -103,7 +103,7 @@
             -moz-animation-delay: 0.732s;
         }
 
-        #fountainG_6 {
+        .fountainG_6 {
             left: 146px;
             animation-delay: 0.8185s;
             -o-animation-delay: 0.8185s;
@@ -112,7 +112,7 @@
             -moz-animation-delay: 0.8185s;
         }
 
-        #fountainG_7 {
+        .fountainG_7 {
             left: 175px;
             animation-delay: 0.905s;
             -o-animation-delay: 0.905s;
@@ -121,7 +121,7 @@
             -moz-animation-delay: 0.905s;
         }
 
-        #fountainG_8 {
+        .fountainG_8 {
             left: 205px;
             animation-delay: 1.0015s;
             -o-animation-delay: 1.0015s;
@@ -195,11 +195,30 @@
 <div class="container" style="padding-top:20px;display:none" id="screen_game">
     <div class="row">
         <div class="col-md-7">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary" style="display: none;" id="game_panel_puzzle_puzzle">
                 <div class="panel-heading">
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
+                <div class="panel-body">
 
+                </div>
+            </div>
+            <div class="panel panel-primary" id="game_panel_puzzle_loading">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Puzzle</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="fountainGContainer">
+                        <div class="fountainG fountainG_1"></div>
+                        <div class="fountainG fountainG_2"></div>
+                        <div class="fountainG fountainG_3"></div>
+                        <div class="fountainG fountainG_4"></div>
+                        <div class="fountainG fountainG_5"></div>
+                        <div class="fountainG fountainG_6"></div>
+                        <div class="fountainG fountainG_7"></div>
+                        <div class="fountainG fountainG_8"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-5">
@@ -243,15 +262,15 @@
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
                 <div class="panel-body" style="text-align:center">
-                    <div id="fountainG">
-                        <div id="fountainG_1" class="fountainG"></div>
-                        <div id="fountainG_2" class="fountainG"></div>
-                        <div id="fountainG_3" class="fountainG"></div>
-                        <div id="fountainG_4" class="fountainG"></div>
-                        <div id="fountainG_5" class="fountainG"></div>
-                        <div id="fountainG_6" class="fountainG"></div>
-                        <div id="fountainG_7" class="fountainG"></div>
-                        <div id="fountainG_8" class="fountainG"></div>
+                    <div class="fountainGContainer">
+                        <div class="fountainG fountainG_1"></div>
+                        <div class="fountainG fountainG_2"></div>
+                        <div class="fountainG fountainG_3"></div>
+                        <div class="fountainG fountainG_4"></div>
+                        <div class="fountainG fountainG_5"></div>
+                        <div class="fountainG fountainG_6"></div>
+                        <div class="fountainG fountainG_7"></div>
+                        <div class="fountainG fountainG_8"></div>
                     </div>
                 </div>
             </div>
@@ -265,16 +284,20 @@
 <script type="text/javascript">
     var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
 
+    function doGetPuzzle(artist, rows, cols) {
+
+    }
+
     function doSearch(artist) {
         screenSwitch(screens.init, screens.loading, function () {
             $.getJSON(api + "artist.py", "artist={0}".format(artist), function (resp) {
-                if(resp.success) {
-                    screenSwitch(screens.loading, screens.game, function() {
+                if (resp.success) {
+                    screenSwitch(screens.loading, screens.game, function () {
                         $("#game_artistName").html(resp.content.name);
-                        $("#game_artistInfo").html(resp.content.biography.replace("\n\n","<p>&nbsp;</p>"));
+                        $("#game_artistInfo").html(resp.content.biography.replace("\n\n", "<p>&nbsp;</p>"));
                     });
                 } else {
-                    screenSwitch(screens.loading, screens.init, function() {
+                    screenSwitch(screens.loading, screens.init, function () {
                         var artistName = $("#init_artistName");
                         artistName.bsValidateError();
                         artistName.focus();
@@ -296,9 +319,9 @@
         }
     });
 
-    $(document).on("keydown", "input", function(e) {
-        if(e.keyCode == 13) {
-            $("a[data-submit="+$(this).attr('data-form')+"]").click();
+    $(document).on("keydown", "input", function (e) {
+        if (e.keyCode == 13) {
+            $("a[data-submit=" + $(this).attr('data-form') + "]").click();
         }
     });
 
