@@ -296,31 +296,27 @@
         "game_puzzle_loading": $("#game_panel_puzzle_loading"),
         "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
     };
-    var pieces;
-    var pos = [4, 4];
-    var rows = 5;
-    var cols = 5;
+    var pos = [2, 2];
+    var rows = 3;
+    var cols = 3;
     var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
 
     function doPuzzle(folder, ext, rows, cols) {
-        var puzzleBox = $("#game_puzzle").find("tbody"), pieceRow = [], puzzleRow;
+        var puzzleBox = $("#game_puzzle").find("tbody"), puzzleRow;
 
-        pieces = [];
         puzzleBox.html("");
 
         for (var r = 0; r < rows; r += 1) {
-            pieceRow = [];
             puzzleRow = "";
             for (var c = 0; c < cols; c += 1) {
                 if (r != rows - 1 || c != rows - 1) {
-                    pieceRow.push(c);
-                    puzzleRow += '<td class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
+                    puzzleRow += '<td data-row="{2}" data-col="{3}" class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
+                } else {
+                    puzzleRow += '<td data-row="{0}" data-col="{1}" class="no-padding"></td>'.format(r, c);
                 }
             }
-            pieces.push(pieceRow);
             puzzleBox.append('<tr>' + puzzleRow + "</tr>");
         }
-        console.log(pieces);
     }
 
     function doGetPuzzle(artist, rows, cols) {
@@ -342,7 +338,7 @@
                     divSwitch(screens.loading, screens.game, function () {
                         $("#game_artistName").html(resp.content.name);
                         $("#game_artistInfo").html(resp.content.biography.replace("\n\n", "<p>&nbsp;</p>"));
-                        doGetPuzzle(resp.content.name, 5, 5);
+                        doGetPuzzle(resp.content.name, 3, 3);
                     });
                 } else {
                     divSwitch(screens.loading, screens.init, function () {
@@ -372,10 +368,28 @@
         }
     });
 
-    $(document).on("keydown", function(e) {
-       if (e.keyCode == 38) {
-
-       }
+    $(document).on("keydown", function (e) {
+        if (e.keyCode == 37) {
+            //Left//
+            if (pos[0] > 0) {
+                movePiece(pos[0], pos[1], pos[0] - 1, pos[1]);
+            }
+        } else if (e.keyCode == 38) {
+            //Up//
+            if (pos[1] > 0) {
+                movePiece(pos[0], pos[1], pos[0], pos[1] - 1);
+            }
+        } else if (e.keyCode == 39) {
+            //Right//
+            if (pos[0] < cols -1) {
+                movePiece(pos[0], pos[1], pos[0] + 1, pos[1]);
+            }
+        } else if (e.keyCode == 40) {
+            //Down//
+            if (pos[1] < rows - 1) {
+                movePiece(pos[0], pos[1], pos[0], pos[1] + 1);
+            }
+        }
     });
 
     function divSwitch(initial, final, callback) {
@@ -386,9 +400,19 @@
         });
     }
 
+    function movePiece(cI, rI, cF, rF) {
+        var current = $("td[data-row=" + rI + "][data-col=" + cI + "]");
+        var final = $("td[data-row=" + rF + "][data-col=" + cF + "]");
+
+        current.html(final.html());
+        final.html("");
+
+        pos = [cF, rF];
+    }
+
     $(document).ready(function () {
         divSwitch(screens.init, screens.game, function () {
-            doGetPuzzle("kings of leon", 5, 5);
+            doGetPuzzle("kings of leon", 3, 3);
         });
     });
 </script>
