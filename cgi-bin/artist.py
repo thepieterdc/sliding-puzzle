@@ -13,7 +13,7 @@ def lastfm(method: str, a: str) -> dict:
             method, urllib.parse.quote(a)))).read().decode("utf8"))
 
 
-def parseArtist(a: str) -> str:
+def parseartist(a: str) -> str:
     return urllib.parse.quote(a.lower().replace(" ", "_"))
 
 
@@ -32,11 +32,12 @@ def wikipedia(query: str) -> dict:
 print("Access-Control-Allow-Origin: *")
 print("Content-Type: application/json\n")
 
-artist = parseArtist(cgi.FieldStorage().getvalue("artist"))
-saveFile = "assets/artists/{}.json".format(artist)
+artist = parseartist(cgi.FieldStorage().getvalue("artist"))
+saveFile = "assets/puzzles/{}/about.json".format(artist)
 
 if os.path.isfile(saveFile):
     respond(True, json.loads("".join(open(saveFile).readlines())))
+os.makedirs("assets/puzzles/{}".format(artist))
 saveFile = open(saveFile, "a+")
 
 lastFmInfo = lastfm("artist.getinfo", artist)
@@ -50,7 +51,7 @@ try:
                                                                                                                 " ").strip()
     bio = lastFmBio if len(lastFmBio) > len(wikipediaBio) else wikipediaBio
 
-    response = {"name": parseArtist(lastFmInfo["artist"]["name"])}
+    response = {"name": parseartist(lastFmInfo["artist"]["name"])}
     try:
         response["biography"] = bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")]
     except Exception:

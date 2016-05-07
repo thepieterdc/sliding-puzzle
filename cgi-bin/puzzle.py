@@ -3,6 +3,7 @@
 import cgi
 import json
 import os.path
+import urllib.parse
 import urllib.request
 
 from PIL import Image, ImageOps
@@ -18,48 +19,57 @@ def lastfm(method: str, a: str) -> dict:
             method, a))).read().decode("utf8"))
 
 
+def parseartist(a: str) -> str:
+    return urllib.parse.quote(a.lower().replace(" ", "_"))
+
+
 def respond(success: bool, parameters):
     print(json.dumps({'success': False, 'error': parameters}) if not success else json.dumps(
         {'success': True, 'content': parameters}))
     exit()
 
 
-def ok(a: str, r: int, ts: int):
+def ok(f: str, c: int, r: int, ts: tuple):
     respond(True,
-            {"directoryname": "assets/images/{}/{}".format(a, str(r)), "extension": "png", "nrofpieces": r * r,
-             "size": {"width": ts, "height": ts}})
+            {"directoryname": "{}/".format(f), "extension": "png", "nrofpieces": c * r,
+             "size": {"width": ts[0], "height": ts[1]}})
 
 
 print("Access-Control-Allow-Origin: *")
 print("Content-Type: application/json\n")
 
-artist = str(cgi.FieldStorage().getvalue("artiest")).lower()
+sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
+
+artist = parseartist(cgi.FieldStorage().getvalue("artiest"))
 rows = int(cgi.FieldStorage().getvalue("rijen"))
 cols = int(cgi.FieldStorage().getvalue("kolommen"))
 
-if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
-    ok(artist, rows, Image.open("assets/images/{}/{}/0_0.png".format(artist, rows)).size[0])
+artistFolder = "assets/puzzles/{}".format(artist)
+folder = "{}/{}x{}".format(artistFolder, str(cols), str(rows))
 
-sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
+if os.path.exists(folder):
+    ok(folder, cols, rows, Image.open("{}/0_0.png".format(folder)).size)
 
-if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
-    ok(artist, rows, Image.open("assets/images/{}/{}/0_0.png".format(artist, rows)).size[0])
+if not os.path.isfile("{}/original.png".format(artistFolder)):
+    albums = lastfm('artist.search', artist).get('results')
+    albums = [album for album in albums.get('artistmatches').get('artist') if str(album['name']).lower() == artist]
+    if not len(albums):
+        respond(False, "No albums found.")
+    results = {sizes.index(album['size']): album['#text'] for album in albums[0].get('image')}
 
-albums = lastfm('artist.search', artist).get('results')
-albums = [album for album in albums.get('artistmatches').get('artist') if str(album['name']).lower() == artist]
-if not len(albums):
-    respond(False, "No albums found.")
-results = {sizes.index(album['size']): album['#text'] for album in albums[0].get('image')}
+    os.makedirs(artistFolder)
 
-os.makedirs("assets/images/{}/{}".format(artist, str(rows)))
-
-img = Image.open(download(results[max(results)])[0])
-borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
-borderedImg.save("assets/images/{}/original.png".format(artist))
+    img = Image.open(download(results[max(results)])[0])
+    borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
+    borderedImg.save("{}/original.png".format(artistFolder))
+else:
+    borderedImg = Image.open("{}/original.png".format(artistFolder))
 tileSize = borderedImg.size[0] // cols, borderedImg.size[1] // rows
 
+os.makedirs(folder)
+
 [borderedImg.copy().crop((c * tileSize[0], r * tileSize[1], (c + 1) * tileSize[0], (r + 1) * tileSize
-[1])).save("assets/images/{}/{}/{}_{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
+[1])).save("{}/{}_{}.{}".format(folder, c, r, 'png')) for c in range(0, cols)
  for r in range(0, rows)]
 
-ok(artist, rows, tileSize[0])
+ok(artist, cols, rows, tileSize)
