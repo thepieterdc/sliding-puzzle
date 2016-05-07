@@ -2,29 +2,257 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="author" content="Pieter De Clercq"/>
+    <meta name="author" content="Pieter De Clercq - http://users.ugent.be/~piedcler/"/>
     <meta name="description" content="Scriptingtalen Project - Schuifpuzzel"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Schuifpuzzel</title>
 
     <link href="assets/bower/bootswatch/flatly/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript">
+        var api = "http://localhost:8000/cgi-bin/";
+    </script>
+    <style type="text/css">
+        #fountainG {
+            position: relative;
+            width: 234px;
+            height: 28px;
+            margin: auto;
+        }
+
+        .fountainG {
+            position: absolute;
+            top: 0;
+            background-color: rgb(255, 255, 255);
+            width: 28px;
+            height: 28px;
+            animation-name: bounce_fountainG;
+            -o-animation-name: bounce_fountainG;
+            -ms-animation-name: bounce_fountainG;
+            -webkit-animation-name: bounce_fountainG;
+            -moz-animation-name: bounce_fountainG;
+            animation-duration: 0.905s;
+            -o-animation-duration: 0.905s;
+            -ms-animation-duration: 0.905s;
+            -webkit-animation-duration: 0.905s;
+            -moz-animation-duration: 0.905s;
+            animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+            -ms-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            animation-direction: normal;
+            -o-animation-direction: normal;
+            -ms-animation-direction: normal;
+            -webkit-animation-direction: normal;
+            -moz-animation-direction: normal;
+            transform: scale(.3);
+            -o-transform: scale(.3);
+            -ms-transform: scale(.3);
+            -webkit-transform: scale(.3);
+            -moz-transform: scale(.3);
+            border-radius: 19px;
+            -o-border-radius: 19px;
+            -ms-border-radius: 19px;
+            -webkit-border-radius: 19px;
+            -moz-border-radius: 19px;
+        }
+
+        #fountainG_1 {
+            left: 0;
+            animation-delay: 0.366s;
+            -o-animation-delay: 0.366s;
+            -ms-animation-delay: 0.366s;
+            -webkit-animation-delay: 0.366s;
+            -moz-animation-delay: 0.366s;
+        }
+
+        #fountainG_2 {
+            left: 29px;
+            animation-delay: 0.4525s;
+            -o-animation-delay: 0.4525s;
+            -ms-animation-delay: 0.4525s;
+            -webkit-animation-delay: 0.4525s;
+            -moz-animation-delay: 0.4525s;
+        }
+
+        #fountainG_3 {
+            left: 58px;
+            animation-delay: 0.549s;
+            -o-animation-delay: 0.549s;
+            -ms-animation-delay: 0.549s;
+            -webkit-animation-delay: 0.549s;
+            -moz-animation-delay: 0.549s;
+        }
+
+        #fountainG_4 {
+            left: 88px;
+            animation-delay: 0.6355s;
+            -o-animation-delay: 0.6355s;
+            -ms-animation-delay: 0.6355s;
+            -webkit-animation-delay: 0.6355s;
+            -moz-animation-delay: 0.6355s;
+        }
+
+        #fountainG_5 {
+            left: 117px;
+            animation-delay: 0.732s;
+            -o-animation-delay: 0.732s;
+            -ms-animation-delay: 0.732s;
+            -webkit-animation-delay: 0.732s;
+            -moz-animation-delay: 0.732s;
+        }
+
+        #fountainG_6 {
+            left: 146px;
+            animation-delay: 0.8185s;
+            -o-animation-delay: 0.8185s;
+            -ms-animation-delay: 0.8185s;
+            -webkit-animation-delay: 0.8185s;
+            -moz-animation-delay: 0.8185s;
+        }
+
+        #fountainG_7 {
+            left: 175px;
+            animation-delay: 0.905s;
+            -o-animation-delay: 0.905s;
+            -ms-animation-delay: 0.905s;
+            -webkit-animation-delay: 0.905s;
+            -moz-animation-delay: 0.905s;
+        }
+
+        #fountainG_8 {
+            left: 205px;
+            animation-delay: 1.0015s;
+            -o-animation-delay: 1.0015s;
+            -ms-animation-delay: 1.0015s;
+            -webkit-animation-delay: 1.0015s;
+            -moz-animation-delay: 1.0015s;
+        }
+
+        @keyframes bounce_fountainG {
+            0% {
+                transform: scale(1);
+                background-color: rgb(0, 0, 0);
+            }
+
+            100% {
+                transform: scale(.3);
+                background-color: rgb(255, 255, 255);
+            }
+        }
+
+        @-o-keyframes bounce_fountainG {
+            0% {
+                -o-transform: scale(1);
+                background-color: rgb(0, 0, 0);
+            }
+
+            100% {
+                -o-transform: scale(.3);
+                background-color: rgb(255, 255, 255);
+            }
+        }
+
+        @-ms-keyframes bounce_fountainG {
+            0% {
+                -ms-transform: scale(1);
+                background-color: rgb(0, 0, 0);
+            }
+
+            100% {
+                -ms-transform: scale(.3);
+                background-color: rgb(255, 255, 255);
+            }
+        }
+
+        @-webkit-keyframes bounce_fountainG {
+            0% {
+                -webkit-transform: scale(1);
+                background-color: rgb(0, 0, 0);
+            }
+
+            100% {
+                -webkit-transform: scale(.3);
+                background-color: rgb(255, 255, 255);
+            }
+        }
+
+        @-moz-keyframes bounce_fountainG {
+            0% {
+                -moz-transform: scale(1);
+                background-color: rgb(0, 0, 0);
+            }
+
+            100% {
+                -moz-transform: scale(.3);
+                background-color: rgb(255, 255, 255);
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container" style="padding-top:20px">
+<div class="container" style="padding-top:20px;display:none" id="screen_game">
     <div class="row">
         <div class="col-md-7">
-            <div class="panel panel-default">
-                <div class="panel-heading"></div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Puzzle</h3>
+                </div>
+
             </div>
         </div>
-
         <div class="col-md-5">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Coldplay</h3>
+                    <h3 class="panel-title" id="game_artistName"></h3>
                 </div>
-                <div class="panel-body" id="artistInfo_text">
-                    //wikipediatext//
+                <div class="panel-body" id="game_artistInfo"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" style="padding-top:20px" id="screen_init">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Puzzle</h3>
+                </div>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td style="width:80%">
+                            <label for="init_artistName" class="sr-only">Artist:</label>
+                            <input type="text" class="form-control" autofocus data-form="initForm" id="init_artistName"
+                                   placeholder="Artist"/></td>
+                        <td><a class="btn btn-primary" data-submit="initForm" id="init_doSearch" style="width:100%"><i
+                                class="fa fa-search"></i></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" style="padding-top:20px;display:none" id="screen_loading">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Puzzle</h3>
+                </div>
+                <div class="panel-body" style="text-align:center">
+                    <div id="fountainG">
+                        <div id="fountainG_1" class="fountainG"></div>
+                        <div id="fountainG_2" class="fountainG"></div>
+                        <div id="fountainG_3" class="fountainG"></div>
+                        <div id="fountainG_4" class="fountainG"></div>
+                        <div id="fountainG_5" class="fountainG"></div>
+                        <div id="fountainG_6" class="fountainG"></div>
+                        <div id="fountainG_7" class="fountainG"></div>
+                        <div id="fountainG_8" class="fountainG"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,11 +261,54 @@
 <script type="text/javascript" src="assets/bower/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="assets/bower/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="assets/bower/snippetjs/src/String.js"></script>
-<script type="text/javascript" src="assets/js/puzzle.min.js"></script>
+<script type="text/javascript" src="assets/js/betterstrap.js"></script>
 <script type="text/javascript">
-$(document).ready(function () {
-    console.log(getArtistInfo("Coldplay"));
-});
+    var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
+
+    function doSearch(artist) {
+        screenSwitch(screens.init, screens.loading, function () {
+            $.getJSON(api + "artist.py", "artist={0}".format(artist), function (resp) {
+                if(resp.success) {
+                    screenSwitch(screens.loading, screens.game, function() {
+                        $("#game_artistName").html(resp.content.name);
+                        $("#game_artistInfo").html(resp.content.biography.replace("\n\n","<p>&nbsp;</p>"));
+                    });
+                } else {
+                    screenSwitch(screens.loading, screens.init, function() {
+                        var artistName = $("#init_artistName");
+                        artistName.bsValidateError();
+                        artistName.focus();
+                    })
+                }
+                console.log(resp);
+            });
+        });
+    }
+
+    $(document).on("click", "#init_doSearch", function () {
+        var artistName = $("#init_artistName");
+        if (artistName.val().length < 2) {
+            artistName.bsValidateError();
+            artistName.focus();
+        } else {
+            artistName.bsValidateClear();
+            doSearch(artistName.val());
+        }
+    });
+
+    $(document).on("keydown", "input", function(e) {
+        if(e.keyCode == 13) {
+            $("a[data-submit="+$(this).attr('data-form')+"]").click();
+        }
+    });
+
+    function screenSwitch(initial, final, callback) {
+        initial.slideUp();
+        initial.promise().done(function () {
+            final.slideDown();
+            callback();
+        });
+    }
 </script>
 </body>
 </html>

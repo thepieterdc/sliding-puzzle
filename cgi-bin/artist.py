@@ -18,7 +18,7 @@ def find_nth(haystack, needle, n):
 
 def lastfm(method: str, a: str) -> dict:
     return json.loads(urllib.request.urlopen(urllib.request.Request(
-        "http://ws.audioscrobbler.com/2.0/?method={}&artist={}&api_key=c94f6bae579e47179e8fbde12880a85c&format=json".format(
+        "http://ws.audioscrobbler.com/2.0/?method={}&artist={}&autocorrect=1&api_key=c94f6bae579e47179e8fbde12880a85c&format=json".format(
             method, a))).read().decode("utf8"))
 
 
@@ -33,8 +33,10 @@ print("Content-Type: application/json\n")
 
 artist = str(cgi.FieldStorage().getvalue("artist")).lower()
 info = lastfm("artist.getinfo", artist)
-if "artist" in info.keys() and "bio" in info.get("artist").keys():
-    bio = str(info.get("artist").get("bio").get("content"))
-    respond(True, {"biography": (bio if bio.count("\n") <= 4 else bio[:find_nth(bio, "\n", 4)]), "name": str(info.get("artist").get("name"))})
-else:
+try:
+    bio = str(info.get("artist").get("bio").get("content")).strip()
+    assert len(bio) > 0
+    assert bio[0:7] != "<a href"
+    respond(True, {"biography": (bio if bio.count("\n") <= 4 else bio[:find_nth(bio, "\n", 3)]), "name": str(info.get("artist").get("name"))})
+except Exception:
     respond(False, "No artist biography found.")
