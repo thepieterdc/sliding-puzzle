@@ -13,6 +13,16 @@
         var api = "http://localhost:8000/";
     </script>
     <style type="text/css">
+        table, tr, th, td {
+            border: 0 !important;
+            border-collapse: collapse;
+            white-space: normal;
+        }
+
+        .no-padding {
+            padding: 0 !important;
+        }
+
         .fountainGContainer {
             position: relative;
             width: 234px;
@@ -194,8 +204,8 @@
 <body>
 <div class="container" style="padding-top:20px;display:none" id="screen_game">
     <div class="row">
-        <div class="col-md-7">
-            <div class="panel panel-primary" style="display: none;" id="game_panel_puzzle_puzzle">
+        <div class="col-md-12 col-lg-7">
+            <div class="panel panel-primary" style="background-color:#000;display: none;" id="game_panel_puzzle_puzzle">
                 <div class="panel-heading">
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
@@ -221,7 +231,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-12 col-lg-5">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title" id="game_artistName"></h3>
@@ -295,9 +305,9 @@
         for (var r = 0; r < rows; r += 1) {
             puzzleRow = "";
             for (var c = 0; c < cols; c += 1) {
-                puzzleRow += '<td><img src="{0}{1}/{2}_{3}.{4}" /></td>'.format(api, folder, r, c, ext);
+                puzzleRow += '<td class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
             }
-            puzzleBox.append("<tr>" + puzzleRow + "</tr>");
+            puzzleBox.append('<tr>' + puzzleRow + "</tr>");
         }
     }
 
@@ -329,7 +339,6 @@
                         artistName.focus();
                     })
                 }
-                console.log(resp);
             });
         });
     }
@@ -358,6 +367,12 @@
             callback();
         });
     }
+
+    $(document).ready(function () {
+        divSwitch(screens.init, screens.game, function () {
+            doGetPuzzle("kings of leon", 5, 5);
+        });
+    });
 </script>
 </body>
 </html>
