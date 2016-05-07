@@ -291,14 +291,12 @@
 <script type="text/javascript" src="assets/bower/bootstrap/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="assets/bower/snippetjs/src/String.js"></script>
 <script type="text/javascript" src="assets/js/betterstrap.js"></script>
+<script type="text/javascript" src="assets/js/puzzle.js"></script>
 <script type="text/javascript">
     var panels = {
         "game_puzzle_loading": $("#game_panel_puzzle_loading"),
         "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
     };
-    var pos = [2, 2];
-    var rows = 3;
-    var cols = 3;
     var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
 
     function doPuzzle(folder, ext, rows, cols) {
