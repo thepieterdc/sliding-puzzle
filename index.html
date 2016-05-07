@@ -10,7 +10,7 @@
     <link href="assets/bower/bootswatch/flatly/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
-        var api = "http://localhost:8000/";
+        var api = "http://192.168.1.131:8000/";
     </script>
     <style type="text/css">
         table, tr, th, td {
@@ -380,7 +380,7 @@
                 movePiece(pos[0], pos[1], pos[0], pos[1] - 1);
             }
         } else if (e.keyCode == 39) {
-            //Right//
+            //Left//
             if (pos[0] < cols -1) {
                 movePiece(pos[0], pos[1], pos[0] + 1, pos[1]);
             }
