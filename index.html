@@ -282,22 +282,35 @@
 <script type="text/javascript" src="assets/bower/snippetjs/src/String.js"></script>
 <script type="text/javascript" src="assets/js/betterstrap.js"></script>
 <script type="text/javascript">
+    var panels = {
+        "game_puzzle_loading": $("#game_panel_puzzle_loading"),
+        "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
+    };
     var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
 
     function doGetPuzzle(artist, rows, cols) {
-
+        $.getJSON(api + "puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
+            if (resp.success) {
+                divSwitch(panels.game_puzzle_loading, panels.game_puzzle_puzzle, function() {
+                    
+                });
+            } else {
+                alert("no puzzle was found. see issue");
+            }
+        });
     }
 
     function doSearch(artist) {
-        screenSwitch(screens.init, screens.loading, function () {
+        divSwitch(screens.init, screens.loading, function () {
             $.getJSON(api + "artist.py", "artist={0}".format(artist), function (resp) {
                 if (resp.success) {
-                    screenSwitch(screens.loading, screens.game, function () {
+                    divSwitch(screens.loading, screens.game, function () {
                         $("#game_artistName").html(resp.content.name);
                         $("#game_artistInfo").html(resp.content.biography.replace("\n\n", "<p>&nbsp;</p>"));
+                        doGetPuzzle(resp.content.name, 5, 5);
                     });
                 } else {
-                    screenSwitch(screens.loading, screens.init, function () {
+                    divSwitch(screens.loading, screens.init, function () {
                         var artistName = $("#init_artistName");
                         artistName.bsValidateError();
                         artistName.focus();
@@ -325,7 +338,7 @@
         }
     });
 
-    function screenSwitch(initial, final, callback) {
+    function divSwitch(initial, final, callback) {
         initial.slideUp();
         initial.promise().done(function () {
             final.slideDown();
