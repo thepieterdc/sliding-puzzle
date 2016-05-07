@@ -205,7 +205,7 @@
 <div class="container" style="padding-top:20px;display:none" id="screen_game">
     <div class="row">
         <div class="col-md-12 col-lg-7">
-            <div class="panel panel-primary" style="background-color:#000;display: none;" id="game_panel_puzzle_puzzle">
+            <div class="panel panel-primary" style="display: none;" id="game_panel_puzzle_puzzle">
                 <div class="panel-heading">
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
@@ -296,19 +296,31 @@
         "game_puzzle_loading": $("#game_panel_puzzle_loading"),
         "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
     };
+    var pieces;
+    var pos = [4, 4];
+    var rows = 5;
+    var cols = 5;
     var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
 
     function doPuzzle(folder, ext, rows, cols) {
-        var puzzleBox = $("#game_puzzle").find("tbody"), puzzleRow;
+        var puzzleBox = $("#game_puzzle").find("tbody"), pieceRow = [], puzzleRow;
+
+        pieces = [];
         puzzleBox.html("");
 
         for (var r = 0; r < rows; r += 1) {
+            pieceRow = [];
             puzzleRow = "";
             for (var c = 0; c < cols; c += 1) {
-                puzzleRow += '<td class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
+                if (r != rows - 1 || c != rows - 1) {
+                    pieceRow.push(c);
+                    puzzleRow += '<td class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
+                }
             }
+            pieces.push(pieceRow);
             puzzleBox.append('<tr>' + puzzleRow + "</tr>");
         }
+        console.log(pieces);
     }
 
     function doGetPuzzle(artist, rows, cols) {
@@ -358,6 +370,12 @@
         if (e.keyCode == 13) {
             $("a[data-submit=" + $(this).attr('data-form') + "]").click();
         }
+    });
+
+    $(document).on("keydown", function(e) {
+       if (e.keyCode == 38) {
+
+       }
     });
 
     function divSwitch(initial, final, callback) {
