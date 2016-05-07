@@ -38,12 +38,12 @@ rows = int(cgi.FieldStorage().getvalue("rijen"))
 cols = int(cgi.FieldStorage().getvalue("kolommen"))
 
 if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
-    ok(artist, rows, Image.open("assets/images/{}/{}/0-0.png".format(artist, rows)).size[0])
+    ok(artist, rows, Image.open("assets/images/{}/{}/0_0.png".format(artist, rows)).size[0])
 
 sizes = ['thumbnail', 'small', 'medium', 'large', 'extralarge', 'mega']
 
 if os.path.exists("assets/images/{}/{}".format(artist, str(rows))):
-    ok(artist, rows, Image.open("assets/images/{}/{}/0-0.png".format(artist, rows)).size[0])
+    ok(artist, rows, Image.open("assets/images/{}/{}/0_0.png".format(artist, rows)).size[0])
 
 albums = lastfm('artist.search', artist).get('results')
 albums = [album for album in albums.get('artistmatches').get('artist') if str(album['name']).lower() == artist]
@@ -59,7 +59,7 @@ borderedImg.save("assets/images/{}/original.png".format(artist))
 tileSize = borderedImg.size[0] // cols, borderedImg.size[1] // rows
 
 [borderedImg.copy().crop((c * tileSize[0], r * tileSize[1], (c + 1) * tileSize[0], (r + 1) * tileSize
-[1])).save("assets/images/{}/{}/{}-{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
+[1])).save("assets/images/{}/{}/{}_{}.{}".format(artist, str(rows), r, c, 'png')) for c in range(0, cols)
  for r in range(0, rows)]
 
 ok(artist, rows, tileSize[0])

@@ -10,7 +10,7 @@
     <link href="assets/bower/bootswatch/flatly/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
-        var api = "http://localhost:8000/cgi-bin/";
+        var api = "http://localhost:8000/";
     </script>
     <style type="text/css">
         .fountainGContainer {
@@ -199,9 +199,9 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
-                <div class="panel-body">
-
-                </div>
+                <table class="table" id="game_puzzle">
+                    <tbody></tbody>
+                </table>
             </div>
             <div class="panel panel-primary" id="game_panel_puzzle_loading">
                 <div class="panel-heading">
@@ -288,11 +288,24 @@
     };
     var screens = {"game": $("#screen_game"), "init": $("#screen_init"), "loading": $("#screen_loading")};
 
+    function doPuzzle(folder, ext, rows, cols) {
+        var puzzleBox = $("#game_puzzle").find("tbody"), puzzleRow;
+        puzzleBox.html("");
+
+        for (var r = 0; r < rows; r += 1) {
+            puzzleRow = "";
+            for (var c = 0; c < cols; c += 1) {
+                puzzleRow += '<td><img src="{0}{1}/{2}_{3}.{4}" /></td>'.format(api, folder, r, c, ext);
+            }
+            puzzleBox.append("<tr>" + puzzleRow + "</tr>");
+        }
+    }
+
     function doGetPuzzle(artist, rows, cols) {
-        $.getJSON(api + "puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
+        $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
             if (resp.success) {
-                divSwitch(panels.game_puzzle_loading, panels.game_puzzle_puzzle, function() {
-                    if()
+                divSwitch(panels.game_puzzle_loading, panels.game_puzzle_puzzle, function () {
+                    doPuzzle(resp.content.directoryname, resp.content.extension, rows, cols);
                 });
             } else {
                 alert("no puzzle was found. see issue");
@@ -302,7 +315,7 @@
 
     function doSearch(artist) {
         divSwitch(screens.init, screens.loading, function () {
-            $.getJSON(api + "artist.py", "artist={0}".format(artist), function (resp) {
+            $.getJSON(api + "cgi-bin/artist.py", "artist={0}".format(artist), function (resp) {
                 if (resp.success) {
                     divSwitch(screens.loading, screens.game, function () {
                         $("#game_artistName").html(resp.content.name);
