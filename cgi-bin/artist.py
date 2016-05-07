@@ -36,7 +36,7 @@ artist = parseArtist(cgi.FieldStorage().getvalue("artist"))
 saveFile = "assets/artists/{}.json".format(artist)
 
 if os.path.isfile(saveFile):
-    respond(True, json.loads(open(saveFile).readlines()))
+    respond(True, json.loads("".join(open(saveFile).readlines())))
 saveFile = open(saveFile, "a+")
 
 lastFmInfo = lastfm("artist.getinfo", artist)
