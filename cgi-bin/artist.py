@@ -2,6 +2,7 @@
 
 import cgi
 import json
+import os
 import urllib.parse
 import urllib.request
 
@@ -12,8 +13,8 @@ def lastfm(method: str, a: str) -> dict:
             method, urllib.parse.quote(a)))).read().decode("utf8"))
 
 
-def longest(a: str, b: str) -> str:
-    return a if len(a) > len(b) else b
+def parseArtist(a: str) -> str:
+    return urllib.parse.quote(a.lower()).replace(" ", "_")
 
 
 def respond(success: bool, parameters):
@@ -31,19 +32,26 @@ def wikipedia(query: str) -> dict:
 print("Access-Control-Allow-Origin: *")
 print("Content-Type: application/json\n")
 
-artist = str(cgi.FieldStorage().getvalue("artist")).lower()
+artist = parseArtist(cgi.FieldStorage().getvalue("artist"))
+saveFile = "assets/artists/{}.json".format(artist)
+
+if os.path.isfile(saveFile):
+    respond(True, json.loads(open(saveFile).readlines()))
+
 lastFmInfo = lastfm("artist.getinfo", artist)
 try:
     assert "error" not in lastFmInfo
+    
     wikipediaInfo = wikipedia(str(lastFmInfo["artist"]["name"]))
 
     lastFmBio = str(lastFmInfo["artist"]["bio"]["content"]).replace("\n", " ").replace("  ", " ").strip()
     wikipediaBio = str(list(wikipediaInfo["query"]["pages"].values())[0]["extract"]).replace("\n", " ").replace("  ",
                                                                                                                 " ").strip()
-    bio = longest(lastFmBio, wikipediaBio)
+    bio = lastFmBio if len(lastFmBio) > len(wikipediaBio) else wikipediaBio
 
     try:
-        respond(True, {"biography": bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")], "name": lastFmInfo["artist"]["name"]})
+        respond(True, {"biography": bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")],
+                       "name": lastFmInfo["artist"]["name"]})
     except Exception:
         respond(True, {"biography": bio, "name": lastFmInfo["artist"]["name"]})
 except Exception:
