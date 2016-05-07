@@ -106,101 +106,104 @@
 <script type="text/javascript" src="assets/js/betterstrap.js"></script>
 <script type="text/javascript" src="assets/js/puzzle.js"></script>
 <script type="text/javascript" src="assets/js/layoutmanager.js"></script>
-<script type="text/javascript" src="assets/js/eventhandlers.js"></script>
+<script type="text/javascript" src="assets/js/eventhandler.js"></script>
 <script type="text/javascript">
-    function doPuzzle(folder, ext, rows, cols) {
-        var puzzleBox = $("#game_puzzle").find("tbody"), puzzleRow;
+    $(document).ready(function () {
+        var EventHandler = new window.EventHandler();
+        var LayoutManager = new window.LayoutManager();
 
-        puzzleBox.html("");
+        function doPuzzle(folder, ext, rows, cols) {
+            var puzzleBox = $("#game_puzzle").find("tbody"), puzzleRow;
 
-        for (var r = 0; r < rows; r += 1) {
-            puzzleRow = "";
-            for (var c = 0; c < cols; c += 1) {
-                if (r != rows - 1 || c != rows - 1) {
-                    puzzleRow += '<td data-row="{2}" data-col="{3}" class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
-                } else {
-                    puzzleRow += '<td data-row="{0}" data-col="{1}" class="no-padding"></td>'.format(r, c);
+            puzzleBox.html("");
+
+            for (var r = 0; r < rows; r += 1) {
+                puzzleRow = "";
+                for (var c = 0; c < cols; c += 1) {
+                    if (r != rows - 1 || c != rows - 1) {
+                        puzzleRow += '<td data-row="{2}" data-col="{3}" class="no-padding"><img src="{0}{1}/{2}_{3}.{4}" style="width:100%;height:auto"/></td>'.format(api, folder, r, c, ext);
+                    } else {
+                        puzzleRow += '<td data-row="{0}" data-col="{1}" class="no-padding"></td>'.format(r, c);
+                    }
                 }
+                puzzleBox.append('<tr>' + puzzleRow + "</tr>");
             }
-            puzzleBox.append('<tr>' + puzzleRow + "</tr>");
         }
-    }
 
-    function doGetPuzzle(artist, rows, cols) {
-        $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
-            if (resp.success) {
-                divSwitch(panels.game_puzzle_loading, panels.game_puzzle_puzzle, function () {
-                    doPuzzle(resp.content.directoryname, resp.content.extension, rows, cols);
-                });
-            } else {
-                alert("no puzzle was found. see issue");
-            }
-        });
-    }
-
-    function doSearch(artist) {
-        divSwitch(screens.init, screens.loading, function () {
-            $.getJSON(api + "cgi-bin/artist.py", "artist={0}".format(artist), function (resp) {
+        function doGetPuzzle(artist, rows, cols) {
+            $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
                 if (resp.success) {
-                    divSwitch(screens.loading, screens.game, function () {
-                        $("#game_artistName").html(resp.content.name);
-                        $("#game_artistInfo").html(resp.content.biography.replace("\n\n", "<p>&nbsp;</p>"));
-                        doGetPuzzle(resp.content.name, 3, 3);
+                    divSwitch(panels.game_puzzle_loading, panels.game_puzzle_puzzle, function () {
+                        doPuzzle(resp.content.directoryname, resp.content.extension, rows, cols);
                     });
                 } else {
-                    divSwitch(screens.loading, screens.init, function () {
-                        var artistName = $("#init_artistName");
-                        artistName.bsValidateError();
-                        artistName.focus();
-                    })
+                    alert("no puzzle was found. see issue");
                 }
             });
+        }
+
+        function doSearch(artist) {
+            LayoutManager.switch(LayoutManager.screens["init"], LayoutManager.screens.loading, function () {
+                $.getJSON(api + "cgi-bin/artist.py", "artist={0}".format(artist), function (resp) {
+                    if (resp.success) {
+                        LayoutManager.switch(LayoutManager.screens.loading, LayoutManager.screens.game, function () {
+                            $("#game_artistName").html(resp.content.name);
+                            $("#game_artistInfo").html(resp.content.biography.replace("\n\n", "<p>&nbsp;</p>"));
+                            doGetPuzzle(resp.content.name, 3, 3);
+                        });
+                    } else {
+                        LayoutManager.switch(LayoutManager.screens.loading, LayoutManager.screens.init, function () {
+                            var artistName = $("#init_artistName");
+                            artistName.bsValidateError();
+                            artistName.focus();
+                        })
+                    }
+                });
+            });
+        }
+
+        $(document).on("click", "#init_doSearch", function () {
+            EventHandler.doSearch($("#init_artistName"), doSearch);
         });
-    }
 
-    $(document).on("click", "#init_doSearch", function () {
-        handle_doSearch($("#"))
-    }
+        $(document).on("keydown", "input", function (e) {
+            EventHandler.formSubmit(e, $(this).attr('data-form'));
+        });
 
-    $(document).on("keydown", "input", function (e) {
-        if (e.keyCode == 13) {
-            $("a[data-submit=" + $(this).attr('data-form') + "]").click();
+        $(document).on("keydown", function (e) {
+            if (e.keyCode == 37) {
+                //Left//
+                if (pos[0] > 0) {
+                    movePiece(pos[0], pos[1], pos[0] - 1, pos[1]);
+                }
+            } else if (e.keyCode == 38) {
+                //Up//
+                if (pos[1] > 0) {
+                    movePiece(pos[0], pos[1], pos[0], pos[1] - 1);
+                }
+            } else if (e.keyCode == 39) {
+                //Left//
+                if (pos[0] < cols - 1) {
+                    movePiece(pos[0], pos[1], pos[0] + 1, pos[1]);
+                }
+            } else if (e.keyCode == 40) {
+                //Down//
+                if (pos[1] < rows - 1) {
+                    movePiece(pos[0], pos[1], pos[0], pos[1] + 1);
+                }
+            }
+        });
+
+        function movePiece(cI, rI, cF, rF) {
+            var current = $("td[data-row=" + rI + "][data-col=" + cI + "]");
+            var final = $("td[data-row=" + rF + "][data-col=" + cF + "]");
+
+            current.html(final.html());
+            final.html("");
+
+            pos = [cF, rF];
         }
     });
-
-    $(document).on("keydown", function (e) {
-        if (e.keyCode == 37) {
-            //Left//
-            if (pos[0] > 0) {
-                movePiece(pos[0], pos[1], pos[0] - 1, pos[1]);
-            }
-        } else if (e.keyCode == 38) {
-            //Up//
-            if (pos[1] > 0) {
-                movePiece(pos[0], pos[1], pos[0], pos[1] - 1);
-            }
-        } else if (e.keyCode == 39) {
-            //Left//
-            if (pos[0] < cols - 1) {
-                movePiece(pos[0], pos[1], pos[0] + 1, pos[1]);
-            }
-        } else if (e.keyCode == 40) {
-            //Down//
-            if (pos[1] < rows - 1) {
-                movePiece(pos[0], pos[1], pos[0], pos[1] + 1);
-            }
-        }
-    });
-
-    function movePiece(cI, rI, cF, rF) {
-        var current = $("td[data-row=" + rI + "][data-col=" + cI + "]");
-        var final = $("td[data-row=" + rF + "][data-col=" + cF + "]");
-
-        current.html(final.html());
-        final.html("");
-
-        pos = [cF, rF];
-    }
 </script>
 </body>
 </html>

@@ -1,16 +1,17 @@
-(function ($) {
+(function ($, w) {
     "use strict";
 
-    var LayoutManager = function () {
-        this.panels = {
-            "game_puzzle_loading": $("#game_panel_puzzle_loading"),
-            "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
-        };
-        this.screens = {
-            "game": $("#screen_game"),
-            "init": $("#screen_init"),
-            "loading": $("#screen_loading")
-        };
+    var LayoutManager = function() {};
+
+    LayoutManager.panels = {
+        "game_puzzle_loading": $("#game_panel_puzzle_loading"),
+        "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
+    };
+
+    LayoutManager.screens = {
+        "game": $("#screen_game"),
+        "init": $("#screen_init"),
+        "loading": $("#screen_loading")
     };
 
     LayoutManager.prototype.switch = function (o, n, callback) {
@@ -19,6 +20,7 @@
             n.slideDown();
             callback();
         })
-    }
+    };
 
-})(window.jQuery);
+    w.LayoutManager = LayoutManager;
+})(window.jQuery, window);

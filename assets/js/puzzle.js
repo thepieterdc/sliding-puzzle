@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, w) {
     "use strict";
 
     var Puzzle = function (cols, rows) {
@@ -9,6 +9,7 @@
 
     Puzzle.prototype.swappable = function (c, r) {
         return this.position[0] == c ? Math.abs(this.position[1] - r) == 1 : this.position[1] == r ? Math.abs(this.position[0] - c) == 1 : false;
-    }
+    };
 
-})(window.jQuery);
+    w.Puzzle = Puzzle;
+})(window.jQuery, window);
