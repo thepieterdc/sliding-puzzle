@@ -33,11 +33,14 @@ print("Access-Control-Allow-Origin: *")
 print("Content-Type: application/json\n")
 
 artist = parseartist(cgi.FieldStorage().getvalue("artist"))
-saveFile = "assets/puzzles/{}/about.json".format(artist)
+saveFolder = "assets/puzzles/{}".format(artist)
+saveFile = "{}/about.json".format(saveFolder)
 
 if os.path.isfile(saveFile):
     respond(True, json.loads("".join(open(saveFile).readlines())))
-os.makedirs("assets/puzzles/{}".format(artist))
+
+if not os.path.exists(saveFolder):
+    os.makedirs("assets/puzzles/{}".format(artist))
 saveFile = open(saveFile, "a+")
 
 lastFmInfo = lastfm("artist.getinfo", artist)
