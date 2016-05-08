@@ -14,3 +14,7 @@ function EventHandler() {
         }
     });
 }
+
+EventHandler.prototype.addListener = function (event, listener) {
+    this.listeners[event].push(listener);
+};
