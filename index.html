@@ -30,18 +30,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
-                <div class="panel-body">
-                    <div class="fountainGContainer">
-                        <div class="fountainG fountainG_1"></div>
-                        <div class="fountainG fountainG_2"></div>
-                        <div class="fountainG fountainG_3"></div>
-                        <div class="fountainG fountainG_4"></div>
-                        <div class="fountainG fountainG_5"></div>
-                        <div class="fountainG fountainG_6"></div>
-                        <div class="fountainG fountainG_7"></div>
-                        <div class="fountainG fountainG_8"></div>
-                    </div>
-                </div>
+                <div class="panel-body loadBox"></div>
             </div>
         </div>
         <div class="col-md-12 col-lg-5">
@@ -64,12 +53,27 @@
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td style="width:80%">
+                        <td style="width:40%">
                             <label for="init_artistName" class="sr-only">Artist:</label>
-                            <input type="text" class="form-control" autofocus data-form="initForm" id="init_artistName"
-                                   placeholder="Artist"/></td>
-                        <td><a class="btn btn-primary" data-submit="initForm" id="init_doSearch" style="width:100%"><i
-                                class="fa fa-search"></i></a></td>
+                            <input type="text" class="form-control" tabindex="1" autofocus data-form="initForm"
+                                   id="init_artistName" placeholder="Artist"/>
+                        </td>
+                        <td style="width:25%">
+                            <label for="init_rows" class="sr-only">Rows:</label>
+                            <input type="number" class="form-control" tabindex="2" data-form="initForm" id="init_rows"
+                                   placeholder="Rows"/>
+                        </td>
+                        <td style="text-align: center;vertical-align: middle"><strong>X</strong></td>
+                        <td style="width:25%">
+                            <label for="init_cols" class="sr-only">Columns:</label>
+                            <input type="number" class="form-control" tabindex="3" data-form="initForm" id="init_cols"
+                                   placeholder="Cols"/>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" data-submit="initForm" id="init_doSearch" style="width:100%">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -84,18 +88,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
-                <div class="panel-body" style="text-align:center">
-                    <div class="fountainGContainer">
-                        <div class="fountainG fountainG_1"></div>
-                        <div class="fountainG fountainG_2"></div>
-                        <div class="fountainG fountainG_3"></div>
-                        <div class="fountainG fountainG_4"></div>
-                        <div class="fountainG fountainG_5"></div>
-                        <div class="fountainG fountainG_6"></div>
-                        <div class="fountainG fountainG_7"></div>
-                        <div class="fountainG fountainG_8"></div>
-                    </div>
-                </div>
+                <div class="panel-body loadBox"></div>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ function EventHandler() {
 
     $(document).on("click", "#init_doSearch", function () {
         self.listeners["click_doSearch"].forEach(function (l) {
-            l($("#init_artistName"));
+            l($("#init_artistName"), $("#init_cols"), $("#init_rows"));
         })
     });
 
