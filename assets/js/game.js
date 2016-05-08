@@ -34,7 +34,7 @@
                         lM.switch(lM.screens.loading, lM.screens.game, function () {
                             $("#game_artistName").html(resp.content.name);
                             $("#game_artistInfo").html(resp.content.biography);
-                            getPuzzle(resp.content.name, 2, 2);
+                            getPuzzle(resp.content.name, cols, rows);
                         });
                     } else {
                         lM.switch(lM.screens.loading, lM.screens.init, function () {
