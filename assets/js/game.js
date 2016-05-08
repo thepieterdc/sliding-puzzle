@@ -1,6 +1,3 @@
-function Game() {
-
-}
-
-Game.prototype.searchArtist = function (artistInput) {
-};
+(function($, EventHandler) {
+    
+})(window.jQuery, EventHandler);
