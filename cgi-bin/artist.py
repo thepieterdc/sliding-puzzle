@@ -39,10 +39,6 @@ saveFile = "{}/about.json".format(saveFolder)
 if os.path.isfile(saveFile):
     respond(True, json.loads("".join(open(saveFile).readlines())))
 
-if not os.path.exists(saveFolder):
-    os.makedirs("assets/puzzles/{}".format(artist))
-saveFile = open(saveFile, "a+")
-
 lastFmInfo = lastfm("artist.getinfo", artist)
 try:
     assert "error" not in lastFmInfo
@@ -54,12 +50,15 @@ try:
                                                                                                                 " ").strip()
     bio = lastFmBio if len(lastFmBio) > len(wikipediaBio) else wikipediaBio
 
-    response = {"name": parseartist(lastFmInfo["artist"]["name"])}
+    response = {"parsedName": parseartist(lastFmInfo["artist"]["name"]), "name": lastFmInfo["artist"]["name"]}
     try:
         response["biography"] = bio[:(bio.find(".", 100) + 1 if bio.find(".", 100) != -1 else "")]
     except Exception:
         response["biography"] = bio
 
+    if not os.path.exists(saveFolder):
+        os.makedirs("assets/puzzles/{}".format(artist))
+    saveFile = open(saveFile, "a+")
     saveFile.write(json.dumps(response))
     respond(True, response)
 except Exception:

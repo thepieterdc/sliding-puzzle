@@ -1,30 +1,40 @@
 (function ($, eH, lM) {
+    var puzzle;
+
     lM.injectLoaders();
 
     function getPuzzle(artist, cols, rows) {
-        console.log(artist);
+        $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
+            if (resp.success) {
+                lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
+                    puzzle = new Puzzle(cols, rows);
+                    puzzle.render($("#game_puzzle").find("tbody"));
+                });
+            } else {
+                alert("no puzzle was found. see issue");
+            }
+        });
     }
 
     function searchArtist(artistInput, colsInput, rowsInput) {
-        var artist = artistInput.val(), cols = colsInput.val(), rows = rowsInput.val();
-        var valid = true;
+        var artist = artistInput.val(), cols = colsInput.val(), rows = rowsInput.val(), valid = true;
         if (artist.length < 2) {
             artistInput.bsValidateError();
             artistInput.focus();
             valid = false;
         }
-        if(cols < 2) {
+        if (cols < 2) {
             colsInput.bsValidateError();
             colsInput.focus();
             valid = false;
         }
-        if(rows < 2) {
+        if (rows < 2) {
             rowsInput.bsValidateError();
             rowsInput.focus();
             valid = false;
         }
 
-        if(valid) {
+        if (valid) {
             artistInput.bsValidateClear();
             colsInput.bsValidateClear();
             rowsInput.bsValidateClear();

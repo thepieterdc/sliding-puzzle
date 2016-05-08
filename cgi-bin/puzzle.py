@@ -58,7 +58,8 @@ if not os.path.isfile("{}/original.png".format(artistFolder)):
         respond(False, "No albums found.")
     results = {sizes.index(album['size']): album['#text'] for album in albums[0].get('image')}
 
-    os.makedirs(artistFolder)
+    if not os.path.exists(artistFolder):
+        os.makedirs(artistFolder)
 
     img = Image.open(download(results[max(results)])[0])
     borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
