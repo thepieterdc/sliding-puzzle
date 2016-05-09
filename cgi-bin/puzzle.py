@@ -20,7 +20,7 @@ def lastfm(method: str, a: str) -> dict:
 
 
 def parseartist(a: str) -> str:
-    return urllib.parse.quote(a.lower().replace("%20"," ").replace(" ", "_"))
+    return urllib.parse.quote(a.lower().replace("%20", " ").replace(" ", "_"))
 
 
 def respond(success: bool, parameters):
@@ -62,7 +62,15 @@ if not os.path.isfile("{}/original.png".format(artistFolder)):
         os.makedirs(artistFolder)
 
     img = Image.open(download(results[max(results)])[0])
-    borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill='black')
+
+    pxls = img.copy().resize((5, 5)).getdata()
+    black = 0
+    for pxl in pxls:
+        if sum(pxl) - 255 < 50:
+            black += 1
+    borderCol = 'black' if (black / float(len(pxls))) < 0.4 else 'white'
+
+    borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill=borderCol)
     borderedImg.save("{}/original.png".format(artistFolder))
 else:
     borderedImg = Image.open("{}/original.png".format(artistFolder))
