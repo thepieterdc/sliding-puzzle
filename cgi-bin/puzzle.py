@@ -68,9 +68,9 @@ if not os.path.isfile("{}/original.png".format(artistFolder)):
     for pxl in pxls:
         if sum(pxl) - 255 < 50:
             black += 1
-    borderCol = 'black' if (black / float(len(pxls))) < 0.4 else 'white'
+    borderCol = 'black' if (black / float(len(pxls))) < 0.4 else 'red'
 
-    borderedImg = ImageOps.expand(img, border=5 + (rows - (img.size[0] + 5) % rows), fill=borderCol)
+    borderedImg = ImageOps.expand(img, border=7 + (rows - (img.size[0] + 7) % rows), fill=borderCol)
     borderedImg.save("{}/original.png".format(artistFolder))
 else:
     borderedImg = Image.open("{}/original.png".format(artistFolder))

@@ -3,6 +3,10 @@
 
     lM.injectLoaders();
 
+    function clickTile(tableCell) {
+        console.log(tableCell);
+    }
+
     function getPuzzle(artist, parsedArtist, cols, rows) {
         $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
             if (resp.success) {
@@ -61,16 +65,21 @@
 
     function showPuzzle(target) {
         var puzzleRow;
-        for(var r = 0; r < puzzle.rows; r += 1) {
+        for (var r = 0; r < puzzle.rows; r += 1) {
             puzzleRow = "";
-            for(var c = 0; c < puzzle.cols; c += 1) {
-                puzzleRow += "<td>";
+            for (var c = 0; c < puzzle.cols; c += 1) {
+                puzzleRow += '<td class="no-padding" data-col="{0}" data-row="{1}">'.format(c, r);
+                if (c !== puzzle.position[0] || r !== puzzle.position[1]) {
+                    puzzleRow += '<img src="{0}" class="tile-image" style="width:100%;height:auto" />'.format(puzzle.piece(c, r));
+                }
                 puzzleRow += "</td>";
             }
             target.append("<tr>{0}</tr>".format(puzzleRow));
         }
+        console.log("test");
     }
 
     eH.addListener("click_doSearch", searchArtist);
+    eH.addListener("click_tileImage", clickTile);
 
 })(window.jQuery, new EventHandler(), new LayoutManager());
