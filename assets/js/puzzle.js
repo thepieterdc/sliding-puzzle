@@ -15,13 +15,13 @@ Puzzle.prototype.addSolvedListener = function (l) {
 };
 
 Puzzle.prototype.checkSolved = function () {
-    if (this.position[0] !== this.cols - 1 || this.position[1] !== this.rows - 1) {
-        return;
-    }
+    // if (this.position[0] !== this.cols - 1 || this.position[1] !== this.rows - 1) {
+    //     return;
+    // }
     for (var c = 0; c < this.cols; c += 1) {
         for (var r = 0; r < this.rows; r += 1) {
-            if (!this.tile(c, r).has("img[data-col={0}][data-row={1}]".format(c, r)) && (c !== this.cols - 1 || this.rows !== -1)) {
-                return;
+            if(this.tile(c, r).has("img[data-col={0}][data-row={1}]".format(c, r)).size() == 0 && (c !== this.cols - 1 || r !== this.rows - 1)) {
+                return false;
             }
         }
     }
