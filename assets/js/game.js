@@ -1,20 +1,30 @@
 (function ($, eH, lM) {
+    "use strict";
+
     var puzzle;
 
     lM.injectLoaders();
 
-    function clickTile(tableCell) {
+    function arrowSwap(colDelta,rowDelta) {
         console.log(tableCell);
+    }
+
+    function clickTile(tableCell) {
+        var c = tableCell.attr('data-col'), r = tableCell.attr('data-row');
+        if (puzzle.swappable(c, r)) {
+            puzzle.swap(tableCell);
+        }
     }
 
     function getPuzzle(artist, parsedArtist, cols, rows) {
         $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
             if (resp.success) {
                 lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
-                    puzzle = new Puzzle(cols, rows, resp.content.directoryname);
+                    var tileHolder = $("#game_puzzle").find("tbody");
+                    puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder);
                     puzzle.setOriginal("assets/puzzles/{0}/original.png".format(parsedArtist));
                     puzzle.shuffle();
-                    showPuzzle($("#game_puzzle").find("tbody"));
+                    showPuzzle();
                 });
             } else {
                 alert("no puzzle was found. see issue");
@@ -63,23 +73,24 @@
         }
     }
 
-    function showPuzzle(target) {
+    function showPuzzle() {
         var puzzleRow;
         for (var r = 0; r < puzzle.rows; r += 1) {
             puzzleRow = "";
             for (var c = 0; c < puzzle.cols; c += 1) {
                 puzzleRow += '<td class="no-padding" data-col="{0}" data-row="{1}">'.format(c, r);
                 if (c !== puzzle.position[0] || r !== puzzle.position[1]) {
-                    puzzleRow += '<img src="{0}" class="tile-image" style="width:100%;height:auto" />'.format(puzzle.piece(c, r));
+                    puzzleRow += '<img src="{0}" class="tile-image" data-col="{1}" data-row="{2}" style="width:100%;height:auto" />'.format(puzzle.piece(c, r), c, r);
                 }
                 puzzleRow += "</td>";
             }
-            target.append("<tr>{0}</tr>".format(puzzleRow));
+            puzzle.tileHolder.append("<tr>{0}</tr>".format(puzzleRow));
         }
-        console.log("test");
     }
 
     eH.addListener("click_doSearch", searchArtist);
     eH.addListener("click_tileImage", clickTile);
+    eH.addListener("tap_tileImage", clickTile);
+    eH.addListener("press_arrow", arrowSwap);
 
 })(window.jQuery, new EventHandler(), new LayoutManager());
