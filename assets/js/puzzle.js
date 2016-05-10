@@ -1,6 +1,4 @@
 function Puzzle(cols, rows, images, tileHolder) {
-    var pieceRow;
-
     this.cols = cols;
     this.rows = rows;
     this.images = images;
@@ -29,7 +27,7 @@ Puzzle.prototype.shuffle = function () {
 };
 
 Puzzle.prototype.swap = function (cell) {
-    var od = cell.html(), tC = cell.attr('data-col'), tR = cell.attr('data-row');
+    var od = cell.html(), tC = parseInt(cell.attr('data-col')), tR = parseInt(cell.attr('data-row'));
     cell.html('');
     this.emptyTile().html(od);
     this.position = [tC, tR];
