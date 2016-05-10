@@ -7,8 +7,7 @@
 
     function arrowSwap(colDelta, rowDelta) {
         var c = parseInt(puzzle.position[0]) + colDelta, r = parseInt(puzzle.position[1]) + rowDelta;
-        if (puzzle.swappable(c, r)) {
-            console.log(c,r);
+        if(puzzle.swappable(c, r)) {
             puzzle.swap(puzzle.tile(c, r));
         }
     }
