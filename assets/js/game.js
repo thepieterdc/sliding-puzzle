@@ -11,8 +11,11 @@
     }
 
     function clickTile(tableCell) {
-        var c = tableCell.attr('data-col'), r = tableCell.attr('data-row');
         puzzle.swap(tableCell);
+    }
+
+    function finish() {
+        console.log("yay");
     }
 
     function getPuzzle(artist, parsedArtist, cols, rows) {
@@ -20,10 +23,10 @@
             if (resp.success) {
                 lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
                     var tileHolder = $("#game_puzzle").find("tbody");
-                    puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder);
-                    puzzle.setOriginal("assets/puzzles/{0}/original.png".format(parsedArtist));
+                    puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder, "assets/puzzles/{0}/original.png".format(parsedArtist));
                     puzzle.shuffle();
                     showPuzzle();
+                    puzzle.addSolvedListener(finish);
                 });
             } else {
                 alert("no puzzle was found. see issue");

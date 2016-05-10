@@ -1,10 +1,36 @@
-function Puzzle(cols, rows, images, tileHolder) {
+function Puzzle(cols, rows, images, tileHolder, original) {
     this.cols = cols;
     this.rows = rows;
     this.images = images;
     this.tileHolder = tileHolder;
+    this.original = original;
+    this.solved = false;
+    this.solvedListeners = [];
+
     this.position = [cols - 1, rows - 1];
 }
+
+Puzzle.prototype.addSolvedListener = function (l) {
+    this.solvedListeners.push(l);
+};
+
+Puzzle.prototype.checkSolved = function () {
+    if (this.position[0] !== this.cols - 1 || this.position[1] !== this.rows - 1) {
+        return;
+    }
+    for (var c = 0; c < this.cols; c += 1) {
+        for (var r = 0; r < this.rows; r += 1) {
+            if (!this.tile(c, r).has("img[data-col={0}][data-row={1}]".format(c, r)) && (c !== this.cols - 1 || this.rows !== -1)) {
+                return;
+            }
+        }
+    }
+
+    this.solved = true;
+    this.solvedListeners.forEach(function (l) {
+        l();
+    });
+};
 
 Puzzle.prototype.emptyTile = function () {
     return this.tile(this.position[0], this.position[1]);
@@ -26,10 +52,6 @@ Puzzle.prototype.piece = function (c, r) {
     return "{0}{1}_{2}.png".format(this.images, c, r);
 };
 
-Puzzle.prototype.setOriginal = function (loc) {
-    this.original = loc;
-};
-
 Puzzle.prototype.shuffle = function () {
 
 };
@@ -40,6 +62,7 @@ Puzzle.prototype.swap = function (cell) {
         cell.html('');
         this.emptyTile().html(od);
         this.position = [tC, tR];
+        this.checkSolved();
     }
 };
 
