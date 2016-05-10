@@ -36,9 +36,11 @@ Puzzle.prototype.shuffle = function () {
 
 Puzzle.prototype.swap = function (cell) {
     var od = cell.html(), tC = parseInt(cell.attr('data-col')), tR = parseInt(cell.attr('data-row'));
-    cell.html('');
-    this.emptyTile().html(od);
-    this.position = [tC, tR];
+    if (this.swappable(tC, tR)) {
+        cell.html('');
+        this.emptyTile().html(od);
+        this.position = [tC, tR];
+    }
 };
 
 Puzzle.prototype.swappable = function (c, r) {

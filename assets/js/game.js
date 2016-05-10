@@ -7,16 +7,12 @@
 
     function arrowSwap(colDelta, rowDelta) {
         var c = parseInt(puzzle.position[0]) + colDelta, r = parseInt(puzzle.position[1]) + rowDelta;
-        if(puzzle.swappable(c, r)) {
-            puzzle.swap(puzzle.tile(c, r));
-        }
+        puzzle.swap(puzzle.tile(c, r));
     }
 
     function clickTile(tableCell) {
         var c = tableCell.attr('data-col'), r = tableCell.attr('data-row');
-        if (puzzle.swappable(c, r)) {
-            puzzle.swap(tableCell);
-        }
+        puzzle.swap(tableCell);
     }
 
     function getPuzzle(artist, parsedArtist, cols, rows) {
