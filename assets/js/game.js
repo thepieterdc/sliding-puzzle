@@ -6,11 +6,9 @@
     lM.injectLoaders();
 
     function arrowSwap(colDelta, rowDelta) {
-        var c = parseInt(puzzle.position[0] + colDelta), r = parseInt(puzzle.position[1] + rowDelta);
-        console.log(c);
-        console.log(r);
-        console.log(puzzle.position);
+        var c = parseInt(puzzle.position[0]) + colDelta, r = parseInt(puzzle.position[1]) + rowDelta;
         if (puzzle.swappable(c, r)) {
+            console.log(c,r);
             puzzle.swap(puzzle.tile(c, r));
         }
     }
