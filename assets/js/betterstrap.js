@@ -1,8 +1,8 @@
 (function ($) {
     "use strict";
 
-    $.fn.bsAlert = function(type, msg) {
-        this.prepend("test");
+    $.fn.bsAlert = function (type, strong, msg) {
+        this.prepend('<div class="alert alert-dismissable alert-{0}"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>{1}!</strong> {2}'.format(type, strong, msg));
     };
 
     $.fn.bsValidateClear = function () {

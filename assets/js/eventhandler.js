@@ -26,6 +26,7 @@
 
         $(document).on("keydown", function (e) {
             if (e.keyCode >= 37 && e.keyCode <= 40) {
+                e.preventDefault();
                 var cD = [1, 0, -1, 0], rD = [0, 1, 0, -1];
                 self.listeners["press_arrow"].forEach(function (l) {
                     l(cD[e.keyCode - 37], rD[e.keyCode - 37]);
