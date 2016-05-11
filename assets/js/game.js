@@ -15,7 +15,8 @@
     }
 
     function finish() {
-        console.log("yay");
+        puzzle.emptyTile().html('<img src="{0}" class="tile-image" data-col="{1}" data-row="{2}" style="width:100%;height:auto" />'.format(puzzle.piece(puzzle.position[0], puzzle.position[1]), puzzle.position[0], puzzle.position[1]));
+        lM.screens.game.bsAlert("success", "Congratiulations, you have solved the puzzle.");
     }
 
     function getPuzzle(artist, parsedArtist, cols, rows) {
@@ -24,7 +25,6 @@
                 lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
                     var tileHolder = $("#game_puzzle").find("tbody");
                     puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder, "assets/puzzles/{0}/original.png".format(parsedArtist));
-                    puzzle.shuffle();
                     showPuzzle();
                     puzzle.addSolvedListener(finish);
                 });
@@ -88,6 +88,7 @@
             }
             puzzle.tileHolder.append("<tr>{0}</tr>".format(puzzleRow));
         }
+        puzzle.shuffle();
     }
 
     eH.addListener("click_doSearch", searchArtist);
