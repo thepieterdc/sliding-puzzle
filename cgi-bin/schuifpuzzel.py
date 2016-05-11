@@ -6,9 +6,6 @@ import hashlib
 import os.path
 import urllib.parse
 import urllib.request
-import cgitb
-
-cgitb.enable()
 
 from PIL import Image, ImageOps
 
@@ -69,14 +66,16 @@ if not os.path.isfile("{}/original.png".format(artistFolder)):
     os.makedirs(artistFolder)
 
     img = Image.open(download(results[max(results)])[0])
+    if img.mode != "RGBA":
+        img = img.convert("RGBA")
 
     pxls = img.copy().resize((5, 5)).getdata()
+
     black = 0
     for pxl in pxls:
         if sum(pxl) - 255 < 50:
             black += 1
     borderCol = 'black' if (black / float(len(pxls))) < 0.4 else 'red'
-
     borderedImg = ImageOps.expand(img, border=7 + (rows - (img.size[0] + 7) % rows), fill=borderCol)
     borderedImg.save("{}/original.png".format(artistFolder))
 else:
