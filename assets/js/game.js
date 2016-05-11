@@ -24,37 +24,25 @@
             data: "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols),
             dataType: "json",
             error: function () {
-                lM.switch(lM.screens.loading, lM.screens.init, function () {
-                    lM.screens.init.find(".row").
-                    artistInput.bsValidateError();
-                    artistInput.focus();
+                lM.switch(lM.screens.game, lM.screens.init, function () {
+                    lM.screens.init.bsAlert("danger", "Oh no", "No puzzles were found for this artist.");
                 });
             },
             success: function (resp) {
                 if (resp.success) {
                     lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
                         var tileHolder = $("#game_puzzle").find("tbody");
-                        puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder, "assets/puzzles/{0}/original.png".format(parsedArtist));
+                        puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder);
                         showPuzzle();
                         puzzle.addSolvedListener(finish);
                     });
                 } else {
-                    alert("no puzzle was found. see issue");
+                    lM.switch(lM.screens.game, lM.screens.init, function () {
+                        lM.screens.init.bsAlert("danger", "Oh no", "No puzzles were found for this artist.");
+                    });
                 }
             },
-            url: "cgi-bin/puzzle.py"
-        });
-        $.getJSON("cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
-            if (resp.success) {
-                lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
-                    var tileHolder = $("#game_puzzle").find("tbody");
-                    puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder, "assets/puzzles/{0}/original.png".format(parsedArtist));
-                    showPuzzle();
-                    puzzle.addSolvedListener(finish);
-                });
-            } else {
-                alert("no puzzle was found. see issue");
-            }
+            url: "cgi-bin/schuifpuzzel.py"
         });
     }
 
@@ -91,7 +79,7 @@
                         });
                     },
                     success: function (resp) {
-                        if("error" in resp) {
+                        if ("error" in resp) {
                             lM.switch(lM.screens.loading, lM.screens.init, function () {
                                 artistInput.bsValidateError();
                                 artistInput.focus();

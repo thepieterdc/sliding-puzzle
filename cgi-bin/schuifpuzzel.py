@@ -15,7 +15,7 @@ def download(url):
 
 def lastfm(method: str, a: str) -> dict:
     return json.loads(urllib.request.urlopen(urllib.request.Request(
-        "http://ws.audioscrobbler.com/2.0/?method={}&artist={}&api_key=c94f6bae579e47179e8fbde12880a85c&format=json".format(
+        "http://ws.audioscrobbler.com/2.0/?method={}&format=json&artist={}&api_key=c94f6bae579e47179e8fbde12880a85c".format(
             method, a))).read().decode("utf8"))
 
 
@@ -31,7 +31,7 @@ def respond(success: bool, parameters):
 
 def ok(f: str, c: int, r: int, ts: tuple):
     respond(True,
-            {"directoryname": "{}/".format(f), "extension": "png", "nrofpieces": c * r,
+            {"directoryname": f, "extension": "png", "nrofpieces": c * r,
              "size": {"width": ts[0], "height": ts[1]}})
 
 

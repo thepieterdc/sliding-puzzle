@@ -1,9 +1,8 @@
-function Puzzle(cols, rows, images, tileHolder, original) {
+function Puzzle(cols, rows, images, tileHolder) {
     this.cols = cols;
     this.rows = rows;
     this.images = images;
     this.tileHolder = tileHolder;
-    this.original = original;
     this.solved = false;
     this.solvedListeners = [];
 
