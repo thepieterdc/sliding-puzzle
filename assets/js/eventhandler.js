@@ -3,11 +3,30 @@
 
     var EventHandler = function () {
         var self = this;
-        self.listeners = {"click_doSearch": [], "click_tileImage": [], "tap_tileImage": [], "press_arrow": []};
+        self.listeners = {
+            "click_cancel": [],
+            "click_doSearch": [],
+            "click_reShuffle": [],
+            "click_tileImage": [],
+            "tap_tileImage": [],
+            "press_arrow": []
+        };
 
         $(document).on("click", "#init_doSearch", function () {
             self.listeners["click_doSearch"].forEach(function (l) {
                 l($("#init_artistName"), $("#init_cols"), $("#init_rows"));
+            });
+        });
+
+        $(document).on("click", "#game_btnCancel", function () {
+            self.listeners["click_cancel"].forEach(function (l) {
+                l();
+            });
+        });
+
+        $(document).on("click", "#game_btnReShuffle", function () {
+            self.listeners["click_reShuffle"].forEach(function (l) {
+                l();
             });
         });
 

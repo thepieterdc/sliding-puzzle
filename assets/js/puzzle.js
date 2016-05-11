@@ -44,7 +44,7 @@ Puzzle.prototype.onBoard = function (c, r) {
 Puzzle.prototype.piece = function (c, r) {
     c = parseInt(c);
     r = parseInt(r);
-    return "{0}{1}_{2}.png".format(this.images, c, r);
+    return "{0}/{1}.png".format(this.images, r * this.rows + c + 1);
 };
 
 Puzzle.prototype.shuffle = function () {

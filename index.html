@@ -5,11 +5,13 @@
     <meta name="author" content="Pieter De Clercq - http://users.ugent.be/~piedcler/"/>
     <meta name="description" content="Scriptingtalen Project - Schuifpuzzel"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>Schuifpuzzel</title>
 
     <link href="assets/bower/bootswatch/flatly/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css"/>
+    <link href="assets/images/favicon.png" rel="icon" type="image/png"/>
     <script type="text/javascript">
         window.lastFmApi = "http://ws.audioscrobbler.com/2.0/?method={0}&api_key=c94f6bae579e47179e8fbde12880a85c&format=json";
     </script>
@@ -20,6 +22,13 @@
         <div class="col-md-12 col-lg-7">
             <div class="panel panel-primary" style="display: none;" id="game_panel_puzzle_puzzle">
                 <div class="panel-heading">
+                    <div class="dropdown pull-right">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none">Options <b class="caret"></b></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a id="game_btnReShuffle" href="#">Reshuffle</a></li>
+                            <li><a id="game_btnCancel" href="#">Cancel puzzle</a></li>
+                        </ul>
+                    </div>
                     <h3 class="panel-title">Puzzle</h3>
                 </div>
                 <table class="table" id="game_puzzle">

@@ -1,6 +1,7 @@
 (function ($, eH, lM) {
     "use strict";
 
+    var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
     var puzzle;
 
     lM.injectLoaders();
@@ -30,6 +31,7 @@
             },
             success: function (resp) {
                 if (resp.success) {
+                    document.title = "Schuifpuzzel :: {0}".format(artist);
                     lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
                         var tileHolder = $("#game_puzzle").find("tbody");
                         puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder);
@@ -44,6 +46,25 @@
             },
             url: "cgi-bin/schuifpuzzel.py"
         });
+    }
+
+    function reset() {
+        document.title = "Schuifpuzzel";
+        puzzle = null;
+
+        lM.switch(lM.screens.game, lM.screens.init, function () {
+            $("#game_puzzle").find("tbody").html('');
+            $("#game_artistName").html('');
+            $("#game_artistInfo").html('');
+        });
+    }
+
+    function reShuffle() {
+        if (!puzzle.solved) {
+            puzzle.shuffle();
+        } else {
+            lM.screens.game.bsAlert("danger", "Oh no", "You already solved the puzzle.");
+        }
     }
 
     function searchArtist(artistInput, colsInput, rowsInput) {
@@ -114,7 +135,13 @@
         puzzle.shuffle();
     }
 
+    if (isChrome) {
+        lM.screens.init.bsAlert("warning", "Attention", "Google Chrome has a small graphical glitch sometimes; please try Mozilla Firefox.", 10000);
+    }
+
+    eH.addListener("click_cancel", reset);
     eH.addListener("click_doSearch", searchArtist);
+    eH.addListener("click_reShuffle", reShuffle);
     eH.addListener("click_tileImage", clickTile);
     eH.addListener("tap_tileImage", clickTile);
     eH.addListener("press_arrow", arrowSwap);
