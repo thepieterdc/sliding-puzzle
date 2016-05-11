@@ -19,8 +19,32 @@
         lM.screens.game.bsAlert("success", "Congratiulations", "You have solved the puzzle.");
     }
 
-    function getPuzzle(artist, parsedArtist, cols, rows) {
-        $.getJSON(api + "cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
+    function getPuzzle(artist, cols, rows) {
+        $.ajax({
+            data: "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols),
+            dataType: "json",
+            error: function () {
+                lM.switch(lM.screens.loading, lM.screens.init, function () {
+                    lM.screens.init.find(".row").
+                    artistInput.bsValidateError();
+                    artistInput.focus();
+                });
+            },
+            success: function (resp) {
+                if (resp.success) {
+                    lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
+                        var tileHolder = $("#game_puzzle").find("tbody");
+                        puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder, "assets/puzzles/{0}/original.png".format(parsedArtist));
+                        showPuzzle();
+                        puzzle.addSolvedListener(finish);
+                    });
+                } else {
+                    alert("no puzzle was found. see issue");
+                }
+            },
+            url: "cgi-bin/puzzle.py"
+        });
+        $.getJSON("cgi-bin/puzzle.py", "artiest={0}&rijen={1}&kolommen={2}".format(artist, rows, cols), function (resp) {
             if (resp.success) {
                 lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
                     var tileHolder = $("#game_puzzle").find("tbody");
@@ -57,19 +81,30 @@
             colsInput.bsValidateClear();
             rowsInput.bsValidateClear();
             lM.switch(lM.screens.init, lM.screens.loading, function () {
-                $.getJSON(api + "cgi-bin/artist.py", "artist={0}".format(artist), function (resp) {
-                    if (resp.success) {
-                        lM.switch(lM.screens.loading, lM.screens.game, function () {
-                            $("#game_artistName").html(resp.content.name);
-                            $("#game_artistInfo").html(resp.content.biography);
-                            getPuzzle(resp.content.name, resp.content.parsedName, cols, rows);
-                        });
-                    } else {
+                $.ajax({
+                    data: "artist={0}&autocorrect=1".format(artist),
+                    dataType: "json",
+                    error: function () {
                         lM.switch(lM.screens.loading, lM.screens.init, function () {
                             artistInput.bsValidateError();
                             artistInput.focus();
                         });
-                    }
+                    },
+                    success: function (resp) {
+                        if("error" in resp) {
+                            lM.switch(lM.screens.loading, lM.screens.init, function () {
+                                artistInput.bsValidateError();
+                                artistInput.focus();
+                            });
+                        } else {
+                            lM.switch(lM.screens.loading, lM.screens.game, function () {
+                                $("#game_artistName").html(resp.artist.name);
+                                $("#game_artistInfo").html(resp.artist.bio.summary);
+                                getPuzzle(resp.artist.name, cols, rows);
+                            });
+                        }
+                    },
+                    url: lastFmApi.format("artist.getinfo")
                 });
             });
         }
