@@ -41,7 +41,7 @@ Puzzle.prototype.isSolved = function() {
         }
     }
     return true;
-}
+};
 
 Puzzle.prototype.onBoard = function (c, r) {
     c = parseInt(c);

@@ -1,6 +1,6 @@
 /**
-Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
-**/
+ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
+ **/
 (function ($, eH, lM) {
     "use strict";
 
@@ -35,11 +35,11 @@ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
             success: function (resp) {
                 if (resp.success) {
                     document.title = "Schuifpuzzel :: {0}".format(artist);
+                    var tileHolder = $("#game_puzzle").find("tbody");
+                    puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder);
+                    showPuzzle();
+                    puzzle.addSolvedListener(finish);
                     lM.switch(lM.panels.game_puzzle_loading, lM.panels.game_puzzle_puzzle, function () {
-                        var tileHolder = $("#game_puzzle").find("tbody");
-                        puzzle = new Puzzle(cols, rows, resp.content.directoryname, tileHolder);
-                        showPuzzle();
-                        puzzle.addSolvedListener(finish);
                     });
                 } else {
                     lM.switch(lM.screens.game, lM.screens.init, function () {
