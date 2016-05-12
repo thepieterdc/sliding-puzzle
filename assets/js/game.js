@@ -63,7 +63,6 @@ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
     }
 
     function reShuffle() {
-      console.log("test");
         if (!puzzle.solved) {
             puzzle.shuffle();
         } else {
