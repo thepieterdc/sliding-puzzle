@@ -1,3 +1,6 @@
+/**
+Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
+**/
 (function ($, eH, lM) {
     "use strict";
 

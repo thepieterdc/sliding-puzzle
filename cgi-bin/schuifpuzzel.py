@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+#
+# Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
+# 
+
 import cgi
 import json
 import hashlib

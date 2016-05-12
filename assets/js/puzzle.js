@@ -1,3 +1,6 @@
+/**
+Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
+**/
 function Puzzle(cols, rows, images, tileHolder) {
     this.cols = cols;
     this.rows = rows;
