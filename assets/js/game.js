@@ -60,6 +60,7 @@
     }
 
     function reShuffle() {
+      console.log("test");
         if (!puzzle.solved) {
             puzzle.shuffle();
         } else {
@@ -136,7 +137,7 @@
     }
 
     if (isChrome) {
-        lM.screens.init.bsAlert("warning", "Attention", "Google Chrome has a small graphical glitch sometimes; please try Mozilla Firefox.", 10000);
+        lM.screens.init.find(".row").find("div:first").bsAlert("warning", "Attention", "Google Chrome has a small graphical glitch sometimes; please try Mozilla Firefox.", 10000);
     }
 
     eH.addListener("click_cancel", reset);

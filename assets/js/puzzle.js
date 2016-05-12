@@ -14,6 +14,19 @@ Puzzle.prototype.addSolvedListener = function (l) {
 };
 
 Puzzle.prototype.checkSolved = function () {
+    if(this.isSolved()) {
+        this.solved = true;
+        this.solvedListeners.forEach(function (l) {
+            l();
+        });
+    }
+};
+
+Puzzle.prototype.emptyTile = function () {
+    return this.tile(this.position[0], this.position[1]);
+};
+
+Puzzle.prototype.isSolved = function() {
     if (this.position[0] !== this.cols - 1 || this.position[1] !== this.rows - 1) {
         return false;
     }
@@ -24,16 +37,8 @@ Puzzle.prototype.checkSolved = function () {
             }
         }
     }
-
-    this.solved = true;
-    this.solvedListeners.forEach(function (l) {
-        l();
-    });
-};
-
-Puzzle.prototype.emptyTile = function () {
-    return this.tile(this.position[0], this.position[1]);
-};
+    return true;
+}
 
 Puzzle.prototype.onBoard = function (c, r) {
     c = parseInt(c);
@@ -49,14 +54,16 @@ Puzzle.prototype.piece = function (c, r) {
 
 Puzzle.prototype.shuffle = function () {
     var cR = 0, rR = 0, tile;
-    for (var i = 0; i < this.rows * this.cols * 101; i += 1) {
-        cR = Math.random();
-        rR = Math.random();
-        tile = this.tile(parseInt(this.position[0]) + Math.sign(cR > 0.5 ? Math.pow(-1, Math.round(cR * 2)) : 0), parseInt(this.position[1]) + Math.sign(rR > 0.5 ? Math.pow(-1, Math.round(rR * 2)) : 0));
-        if (typeof tile !== "undefined") {
-            this.swap(tile, true);
+    do {
+        for (var i = 0; i < this.rows * this.cols * 101; i += 1) {
+            cR = Math.random();
+            rR = Math.random();
+            tile = this.tile(parseInt(this.position[0]) + Math.sign(cR > 0.5 ? Math.pow(-1, Math.round(cR * 2)) : 0), parseInt(this.position[1]) + Math.sign(rR > 0.5 ? Math.pow(-1, Math.round(rR * 2)) : 0));
+            if (typeof tile !== "undefined") {
+                this.swap(tile, true);
+            }
         }
-    }
+    } while(this.isSolved());
 };
 
 Puzzle.prototype.swap = function (cell, init) {
