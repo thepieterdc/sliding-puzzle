@@ -2,7 +2,7 @@
 
 #
 # Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
-# 
+#
 
 import cgi
 import json
@@ -62,11 +62,11 @@ if os.path.exists(folder):
 
 if not os.path.isfile("{}/original.png".format(artistFolder)):
     albums = lastfm('artist.search', artist).get('results')
-    albums = [album for album in albums.get('artistmatches').get('artist') if str(album['name']).lower() == artist]
+    albums = [album for album in albums.get('artistmatches').get('artist') if artist in str(album.get('name')).lower() ]
     if not len(albums):
         respond(False, "No albums found.")
     results = {sizes.index(album['size']): album['#text'] for album in albums[0].get('image')}
-
+    
     os.makedirs(artistFolder)
 
     img = Image.open(download(results[max(results)])[0])
