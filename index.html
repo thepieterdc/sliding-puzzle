@@ -27,7 +27,8 @@ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
             <div class="panel panel-primary" style="display: none;" id="game_panel_puzzle_puzzle">
                 <div class="panel-heading">
                     <div class="dropdown pull-right">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none">Options <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none"><i class="fa fa-wrench"></i> Options
+                            <b class="caret"></b></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a id="game_btnReShuffle" href="#">Reshuffle</a></li>
                             <li><a id="game_btnCancel" href="#">Cancel puzzle</a></li>
@@ -41,17 +42,28 @@ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
             </div>
             <div class="panel panel-primary" id="game_panel_puzzle_loading">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Puzzle</h3>
+                    <h3 class="panel-title"><i class="fa fa-puzzle-piece"></i> Puzzle</h3>
                 </div>
                 <div class="panel-body loadBox"></div>
             </div>
         </div>
         <div class="col-md-12 col-lg-5">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title" id="game_artistName"></h3>
+            <div class="col-md-6 col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-info"></i> <span id="game_artistName"></span></h3>
+                    </div>
+                    <div class="panel-body" id="game_artistInfo"></div>
                 </div>
-                <div class="panel-body" id="game_artistInfo"></div>
+            </div>
+            <div class="col-md-6 col-lg-12">
+                <div class="panel panel-primary" id="game_topTracksPanel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-line-chart"></i> Top tracks</h3>
+                    </div>
+                    <div class="panel-body" id="game_artistTopTracks" style="display:none"></div>
+                    <div class="panel-body loadBox" id="game_artistTopTracksLoading"></div>
+                </div>
             </div>
         </div>
     </div>

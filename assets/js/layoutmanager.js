@@ -6,7 +6,8 @@ function LayoutManager() {
 
 LayoutManager.prototype.panels = {
     "game_puzzle_loading": $("#game_panel_puzzle_loading"),
-    "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle")
+    "game_puzzle_puzzle": $("#game_panel_puzzle_puzzle"),
+    "game_toptracks": $("#game_topTracksPanel")
 };
 LayoutManager.prototype.screens = {
     "game": $("#screen_game"),

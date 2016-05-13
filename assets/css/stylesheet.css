@@ -11,6 +11,10 @@ table, tr, th, td {
     padding: 0 !important;
 }
 
+.fa:not(.fa-search) {
+    margin-right: 4%;
+}
+
 .fountainGContainer {
     position: relative;
     width: 234px;

@@ -59,6 +59,9 @@
             $("#game_puzzle").find("tbody").html('');
             $("#game_artistName").html('');
             $("#game_artistInfo").html('');
+            $("#game_artistTopTracks").html('').hide();
+            $("#game_topTracksPanel").show();
+            $("#game_artistTopTracksLoading").show();
         });
     }
 
@@ -113,6 +116,7 @@
                                 $("#game_artistName").html(resp.artist.name);
                                 $("#game_artistInfo").html(resp.artist.bio.summary);
                                 getPuzzle(resp.artist.name, cols, rows);
+                                topTracks(resp.artist.name);
                             });
                         }
                     },
@@ -136,6 +140,34 @@
             puzzle.tileHolder.append("<tr>{0}</tr>".format(puzzleRow));
         }
         puzzle.shuffle();
+    }
+
+    function topTracks(artist) {
+        var cell, show = 4, topTracksPanel = $("#game_artistTopTracks"), trackInfo;
+        $.ajax({
+            data: "artist={0}".format(artist),
+            dataType: "json",
+            error: function () {
+                lM.panels.game_toptracks.fadeOut(1000);
+            },
+            success: function (resp) {
+                if ("error" in resp) {
+                    lM.panels.game_toptracks.fadeOut(1000);
+                } else {
+                    console.log(resp);
+                    lM.switch($("#game_artistTopTracksLoading"), topTracksPanel, function() {
+                        show = resp.toptracks.length < 4 ? resp.toptracks.length : 4;
+                        topTracksPanel.html('');
+                        for(var i = 0; i < show; i += 1) {
+                            trackInfo = resp.toptracks[i];
+                            cell = '<div class="col-md-{0}"><img src="" /></div>'.format(12/show);
+                            topTracksPanel.append(cell);
+                        }
+                    });
+                }
+            },
+            url: lastFmApi.format("artist.gettoptracks")
+        });
     }
 
     if (isChrome) {
