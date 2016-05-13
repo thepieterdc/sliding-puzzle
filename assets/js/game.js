@@ -174,7 +174,6 @@
                 if ("error" in resp) {
                     lM.panels.game_toptracks.fadeOut(1000);
                 } else {
-                    console.log(resp);
                     lM.switch($("#game_artistTopTracksLoading"), topTracksPanel, function () {
                         show = resp.toptracks.length < 4 ? resp.toptracks.length : 4;
                         topTracksPanel.html('');
