@@ -31,7 +31,7 @@
         $(document).on("click", ".tracklist_doshow", function () {
             var $this = $(this);
             self.listeners["click_playTrack"].forEach(function (l) {
-                l($this.attr('data-artist'), $this.attr('data-song'), $this);
+                l($this.attr('data-artist'), $this.attr('data-song'), $this.closest("div.panel"));
             });
         });
 

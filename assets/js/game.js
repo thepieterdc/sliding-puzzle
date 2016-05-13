@@ -141,20 +141,22 @@
         }
         puzzle.shuffle();
     }
-    
+
     function loadYouTube(artist, song, container) {
-        var videoUrl = "";
         $.ajax({
-            data: "part=snippet&q={0}&maxResults=1&videoCategoryId=10&type=video&key={1}".format(artist+" - "+song, window.youtubeApiKey),
+            data: "part=snippet&q={0}&maxResults=1&videoCategoryId=10&type=video&key={1}".format(artist + " - " + song, window.youtubeApiKey),
             dataType: "json",
             error: function () {
-                container.parent("div.col-md-12").fadeOut(500);
+                container.closest("div.col-md-12").fadeOut(500);
             },
             success: function (resp) {
-                if("error" in resp) {
-                    container.parent("div.col-md-12").fadeOut(500);
+                if ("error" in resp) {
+                    container.closest("div.col-md-12").fadeOut(500);
+                } else {
+                    lM.switch(container.find("div.tracklist_loading"), container.find("div.tracklist_track"), function () {
+                        container.find("div.tracklist_track").html('<iframe style="width:100%;height:auto" src="https://www.youtube.com/embed/{0}?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>'.format(resp.items[0].id.videoId));
+                    });
                 }
-                console.log(resp);
             },
             url: "https://www.googleapis.com/youtube/v3/search"
         });
@@ -173,18 +175,18 @@
                     lM.panels.game_toptracks.fadeOut(1000);
                 } else {
                     console.log(resp);
-                    lM.switch($("#game_artistTopTracksLoading"), topTracksPanel, function() {
+                    lM.switch($("#game_artistTopTracksLoading"), topTracksPanel, function () {
                         show = resp.toptracks.length < 4 ? resp.toptracks.length : 4;
                         topTracksPanel.html('');
-                        for(var i = 0; i < show; i += 1) {
+                        for (var i = 0; i < show; i += 1) {
                             trackInfo = resp.toptracks.track[i];
                             row = ('<div class="col-md-12">' +
-                                '<div class="panel panel-default">' +
-                                '<div class="panel-heading"><h3 class="panel-title"><a data-toggle="collapse" data-target="#collapse{0}" class="tracklist_doshow" data-artist="{2}" data-song="{1}" href="#collapse{0}"><div class="pull-right"><b class="caret"></b></div> <i class="fa fa-music"></i> {1}</a></h3></div>' +
-                                '<div id="collapse{0}" class="panel-collapse collapse"><div class="panel-body tracklist_loading">' +
-                                '<div id="floatingBarsG"><div class="blockG" id="rotateG_01"></div><div class="blockG" id="rotateG_02"></div><div class="blockG" id="rotateG_03"></div><div class="blockG" id="rotateG_04"></div><div class="blockG" id="rotateG_05"></div><div class="blockG" id="rotateG_06"></div><div class="blockG" id="rotateG_07"></div><div class="blockG" id="rotateG_08"></div></div>' +
-                                '</div><div class="panel-body tracklist_track" style="display:none"></div></div></div>' +
-                                '</div></div>').format(i, trackInfo.name, artist);
+                            '<div class="panel panel-default">' +
+                            '<div class="panel-heading"><h3 class="panel-title"><a data-toggle="collapse" data-target="#collapse{0}" class="tracklist_doshow" data-artist="{2}" data-song="{1}" href="#collapse{0}"><div class="pull-right"><b class="caret"></b></div> <i class="fa fa-music"></i> {1}</a></h3></div>' +
+                            '<div id="collapse{0}" class="panel-collapse collapse"><div class="panel-body tracklist_loading">' +
+                            '<div id="floatingBarsG"><div class="blockG" id="rotateG_01"></div><div class="blockG" id="rotateG_02"></div><div class="blockG" id="rotateG_03"></div><div class="blockG" id="rotateG_04"></div><div class="blockG" id="rotateG_05"></div><div class="blockG" id="rotateG_06"></div><div class="blockG" id="rotateG_07"></div><div class="blockG" id="rotateG_08"></div></div>' +
+                            '</div><div class="panel-body tracklist_track" style="display:none"></div></div></div>' +
+                            '</div></div>').format(i, trackInfo.name, artist);
                             topTracksPanel.append(row);
                         }
                     });
