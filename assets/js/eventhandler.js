@@ -1,6 +1,6 @@
 /**
-Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
-**/
+ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
+ **/
 (function ($, w) {
     "use strict";
 
@@ -9,6 +9,7 @@ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
         self.listeners = {
             "click_cancel": [],
             "click_doSearch": [],
+            "click_playTrack": [],
             "click_reShuffle": [],
             "click_tileImage": [],
             "tap_tileImage": [],
@@ -24,6 +25,13 @@ Created by Pieter De Clercq <pieterdeclercq@outlook.com>.
         $(document).on("click", "#game_btnCancel", function () {
             self.listeners["click_cancel"].forEach(function (l) {
                 l();
+            });
+        });
+
+        $(document).on("click", ".tracklist_doshow", function () {
+            var $this = $(this);
+            self.listeners["click_playTrack"].forEach(function (l) {
+                l($this.attr('data-artist'), $this.attr('data-song'), $this);
             });
         });
 
