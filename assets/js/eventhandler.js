@@ -50,7 +50,7 @@
 
         $(document).on("keydown", "input", function (e) {
             if (e.keyCode == 13) {
-                $("a[data-submit={0}]".format($(this).attr('data-form'))).click();
+                $("a[data-submit="+$(this).attr('data-form')+"]").click();
             }
         });
 

@@ -19,7 +19,7 @@
     }
 
     function finish() {
-        puzzle.emptyTile().html('<img src="{0}" class="tile-image" data-col="{1}" data-row="{2}" style="width:100%;height:auto" />'.format(puzzle.piece(puzzle.position[0], puzzle.position[1]), puzzle.position[0], puzzle.position[1]));
+        puzzle.emptyTile().html('<img src="'+(puzzle.piece(puzzle.position[0], puzzle.position[1]))+'" class="tile-image" data-col="'+(puzzle.position[0])+'" data-row="'+(puzzle.position[1])+'" style="width:100%;height:auto" />');
         lM.screens.game.bsAlert("success", "Congratiulations", "You have solved the puzzle.");
     }
 
